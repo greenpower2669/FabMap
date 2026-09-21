@@ -1,0 +1,17 @@
+plugins { id 'com.android.application' }
+def buildNumber = (project.findProperty('buildNumber') ?: '1').toString().toInteger()
+android {
+    namespace 'fr.fabmap.app'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'fr.fabmap.app'
+        minSdk 26
+        targetSdk 35
+        versionCode 100000 + buildNumber
+        versionName "0.1.0-b" + buildNumber
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}

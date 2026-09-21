@@ -1,1 +1,15 @@
-# FabMap
+# FabMap 🫧
+
+Mémoire vivante et aide-mémoire Android, avec zoom dans les bulles filles et dézoom sur le chemin d'origine. Première démonstration : télévision et télécommande.
+
+**Prototype 0.1.0 à tester sur téléphone** : bulles et liens réutilisables, création, recherche, lecture vocale, photo, étapes et sauvegarde locale. Pas de serveur, compte familial, messages ni accès distant. ChatGPT n'est qu'un raccourci web facultatif.
+
+## Livrer directement l'APK
+
+Un push sur main modifiant Android déclenche le build ; il est aussi possible de lancer **Actions → FabMap APK direct Release → Run workflow**. Si la compilation et la publication réussissent, un APK `FabMap-v0.1.0-bN-debug.apk` est dans **Releases**. Pas de `upload-artifact`, pas de ZIP Actions.
+
+Ce contournement concerne uniquement le quota de stockage des artefacts Actions ; il ne contourne pas les minutes CI, les restrictions de compte ou la facturation. Signature debug temporaire : une mise à jour peut exiger désinstallation et entraîner la perte de données si aucune sauvegarde n'a été exportée.
+
+Outils : JDK 17, Gradle 8.10.2, Android SDK 35. Construction locale : `gradle :app:assembleDebug -PbuildNumber=1`.
+
+Documents FAB Copilot : [brain.md](brain.md), [brainmap.md](brainmap.md), [debughistorical.md](debughistorical.md), [todo.md](todo.md).
