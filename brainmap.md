@@ -20,3 +20,6 @@ Le titre est modifiable ; l'identifiant permanent n'est pas le titre. Plusieurs 
 - Signature debug sur runner non durable : APK de test peut exiger désinstallation avant réinstallation ; signature stable et AAB seront une étape à part.
 - Workflow sans upload-artifact : supprime ce stockage pour livraison ; minutes Actions et permissions de publication restent nécessaires.
 - Validation sur téléphone et compilation réelles restent à confirmer, ne pas déduire leur réussite de la présence du code.
+
+## Correctif observé du pipeline
+Premier run : setup-android@v3 a échoué sur 'Failed to find package tools' avant Gradle. Retirer cette action et utiliser le sdkmanager déjà présent sur le runner, puis vérifier compilation/release.

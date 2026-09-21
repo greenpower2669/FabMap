@@ -7,7 +7,8 @@
 - GitHub Actions sur push + lancement manuel, publication de l'APK directement en pré-release GitHub sans upload-artifact.
 
 ## À confirmer (ne pas déclarer prêt avant les preuves)
-- Commit sur main, déclenchement et réussite du run Actions, Release et lien APK.
+- Commit initial confirmé sur main : dd5ced45384997c5f7edc2d667566a2bd7370891.
+- Run #1 (35661973983) : échec confirmé dans setup-android@v3 avant Gradle ; correctif SDK préparé dans ce commit. Vérifier la nouvelle Action, Release et lien APK.
 - Essai sur téléphone : affichage, voix, sauvegarde/restauration et photos. Signatures debug : exporter avant réinstallation.
 - Améliorer erreurs de restauration et gestion des médias volumineux selon tests.
 - Ajout favoris, annotations photo cliquables, sous-routines composables, suppression/modification de liens, zoom animé, recherche améliorée.

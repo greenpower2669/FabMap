@@ -7,3 +7,8 @@
 - Risque : keystore debug nouvelle à chaque runner → installation par-dessus la version précédente possiblement impossible. Sauvegarder avant désinstallation. Signature de production stable à préparer plus tard.
 - Tests non faits : Android build, installation téléphone, cycles, retour depuis recherche, appareil photo, TTS, archive corrompue et restauration.
 - Aucune panne de compilation ni Release réussie affirmée avant consultation du run.
+
+## Run #1 — échec reproduit
+- Run 35661973983 : échec dans android-actions/setup-android@v3, AVANT Gradle ; journal : 'Warning: Failed to find package tools'.
+- Cause observée : l'action invoque sdkmanager tools alors que le catalogue ne fournit plus ce paquet. Ne pas attribuer cet échec au quota, au code Java ou au Base64.
+- Correctif dans ce commit : supprimer l'action setup-android@v3 ; le journal prouve que sdkmanager existe déjà sur le runner Ubuntu, installer directement plateformes/build-tools. Nouveau run et APK à confirmer.

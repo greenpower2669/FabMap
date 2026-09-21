@@ -20,3 +20,6 @@
 
 ## Règle de vérité
 Ne pas annoncer d'APK avant compilation et Release vérifiées. La sauvegarde est indispensable avant désinstallation d'une APK signée debug par un autre runner.
+
+## CI — correction après premier run
+Le runner Ubuntu dispose déjà de sdkmanager ; éviter l'action setup-android v3 qui recherche le paquet obsolète 'tools'. Installer directement platform 35 et build-tools 35.0.0.
