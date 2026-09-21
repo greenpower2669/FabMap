@@ -32,3 +32,9 @@ Run 35662052714 : échec SDK manager absent du PATH. Localisation explicite du b
 - À confirmer : sens exact du message vocal « sauvegarde ou dl de probables » (interprété procédures/bulles).
 - À vérifier immédiatement : compilation Actions déclenchée par le code, logs, lien APK direct de nouvelle pré-release ; corriger dans le même cycle avec quatre mémoires si échec.
 - Tests smartphone : exporter une procédure avec deux niveaux, importer deux fois sous parents distincts, dézoom, photos, import refusé si archive invalide, sauvegarde complète avant désinstallation.
+
+## Livraison 0.2.0 vérifiée
+- Run #4 : https://github.com/greenpower2669/FabMap/actions/runs/35665143325 — compilation et publication réussies.
+- Pré-release : https://github.com/greenpower2669/FabMap/releases/tag/v0.2.0-b4
+- APK direct : https://github.com/greenpower2669/FabMap/releases/download/v0.2.0-b4/FabMap-v0.2.0-b4-debug.apk (33 011 octets d'après GitHub).
+- Tests sur appareil non effectués. Vérifier export/import, photo, cycles et espace insuffisant. Avant toute désinstallation de v0.1.0, EXPORTER LA MÉMOIRE ENTIÈRE : signature debug éphémère.

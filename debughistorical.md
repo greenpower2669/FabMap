@@ -28,3 +28,7 @@
 - Paquets ZIP : interdire chemins arbitraires/entrées doublées, borner nombres et volumes, vérifier photos avant adoption ; à tester avec fichier corrompu.
 - L'interprétation de « probables » comme « procédures / bulles » reste une hypothèse explicite, pas une citation littérale de Fab.
 - Build CI, publication et vérifications Android 0.2.0 **non réalisés** au moment de ce commit ; ne pas annoncer d'APK prématurément.
+
+## Run #4 — livraison vérifiée
+- Run 35665143325 du commit b43bf546ffecdfd9e991ba7673af0fde4cb9b7c6 : SDK, Gradle, compilation et publication directe réussis.
+- Pré-release v0.2.0-b4, APK 33011 octets publiée. Aucune preuve de test réel de fichiers .fabmap ou du comportement Android, à effectuer sur téléphone.

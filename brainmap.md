@@ -35,3 +35,6 @@ Le run #3 du commit b6e849c5aba3bd20322a538203deb6ff91632363 a compilé :app:ass
 - `MainActivity.java` : requêtes 105/106, saisie des identifiants de contexte avant sélecteur Android et conservation dans instance state. Boutons « Télécharger cette bulle et ses filles » / « Importer des bulles ici ». Import sans remplacement : clone des JSON existants, nouveaux UUID pour tous les nœuds, liens internes remappés, médias copiés sous noms distincts, racine ajoutée dans les enfants du parent cible. Ancienne restauration complète inchangée.
 - Vérification de schéma/kind, références fermées, chemins whitelistés, duplications et tailles avant mutation de graphe. Échec d'archive ne remplace pas le JSON existant ; les données locales restent privées.
 - Limites connues : copie/ZIP effectués sur thread UI (gros paquet peut figer l'écran), sauvegarde globale préexistante distincte et remplaçante, robustesse d'erreur d'écriture après validation à renforcer, interface de restauration non transactionnelle pour panne de stockage ; tests téléphone indispensables.
+
+## CI 0.2.0
+Le run 35665143325 compile le nouveau `BubblePacks.java` avec MainActivity et publie la pré-release v0.2.0-b4 ; la compilation ne constitue pas un test d'import/export réel sur appareil.
