@@ -12,3 +12,7 @@
 - Run 35661973983 : échec dans android-actions/setup-android@v3, AVANT Gradle ; journal : 'Warning: Failed to find package tools'.
 - Cause observée : l'action invoque sdkmanager tools alors que le catalogue ne fournit plus ce paquet. Ne pas attribuer cet échec au quota, au code Java ou au Base64.
 - Correctif dans ce commit : supprimer l'action setup-android@v3 ; le journal prouve que sdkmanager existe déjà sur le runner Ubuntu, installer directement plateformes/build-tools. Nouveau run et APK à confirmer.
+
+## Run #2 — échec distinct
+- Run 35662052714 : 'sdkmanager: command not found' ; setup-android supprimé, donc l'outil n'est plus dans PATH. Gradle et Java n'ont pas été exécutés.
+- Correction : localisation explicite du SDK préinstallé depuis son emplacement vérifié au run #1, variables SDK définies ; téléchargement uniquement si composants manquants. À revérifier sur run #3.

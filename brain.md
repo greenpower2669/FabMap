@@ -23,3 +23,6 @@ Ne pas annoncer d'APK avant compilation et Release vérifiées. La sauvegarde es
 
 ## CI — correction après premier run
 Le runner Ubuntu dispose déjà de sdkmanager ; éviter l'action setup-android v3 qui recherche le paquet obsolète 'tools'. Installer directement platform 35 et build-tools 35.0.0.
+
+## CI — correction #2
+Sans setup-android, sdkmanager n'est pas dans le PATH. Trouver le binaire via le répertoire SDK préinstallé et définir ANDROID_HOME/ANDROID_SDK_ROOT explicitement.

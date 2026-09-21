@@ -23,3 +23,6 @@ Le titre est modifiable ; l'identifiant permanent n'est pas le titre. Plusieurs 
 
 ## Correctif observé du pipeline
 Premier run : setup-android@v3 a échoué sur 'Failed to find package tools' avant Gradle. Retirer cette action et utiliser le sdkmanager déjà présent sur le runner, puis vérifier compilation/release.
+
+## Diagnostic run #2
+Le runner contient un SDK à /usr/local/lib/android/sdk d'après run #1, mais la commande sdkmanager n'est pas dans PATH sans setup-android ; utiliser find sur cmdline-tools et sdk_root explicite ; vérifier que platforms/android-35 et build-tools/35.0.0 sont présents avant l'installation.

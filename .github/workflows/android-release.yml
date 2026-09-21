@@ -25,8 +25,19 @@ jobs:
           java-version: '17'
       # Ubuntu runner already provides Android SDK command-line tools; do not invoke
       # setup-android@v3: it tries to install obsolete package 'tools' and aborts.
-      - name: Installer les composants SDK nécessaires
-        run: sdkmanager --install 'platforms;android-35' 'build-tools;35.0.0'
+      - name: Repérer le SDK préinstallé et compléter si nécessaire
+        shell: bash
+        run: |
+          set -euo pipefail
+          SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          sdkmanager="$(find "$SDK_ROOT/cmdline-tools" -type f -name sdkmanager -print -quit)"
+          test -n "$sdkmanager"
+          echo "ANDROID_HOME=$SDK_ROOT" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$SDK_ROOT" >> "$GITHUB_ENV"
+          if [[ ! -f "$SDK_ROOT/platforms/android-35/android.jar" || ! -x "$SDK_ROOT/build-tools/35.0.0/aapt2" ]]; then
+            yes | "$sdkmanager" --sdk_root="$SDK_ROOT" --licenses >/dev/null || true
+            "$sdkmanager" --sdk_root="$SDK_ROOT" --install 'platforms;android-35' 'build-tools;35.0.0'
+          fi
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.10.2'
