@@ -29,3 +29,9 @@ Le runner contient un SDK à /usr/local/lib/android/sdk d'après run #1, mais la
 
 ## État de livraison vérifié
 Le run #3 du commit b6e849c5aba3bd20322a538203deb6ff91632363 a compilé :app:assembleDebug puis publié la pré-release v0.1.0-b3 (APK de 27059 octets). Il valide le canal sans upload-artifact ; il ne valide pas l'usage sur téléphone ni la signature d'une future mise à jour.
+
+## V0.2.0 — paquets locaux de bulles/procédures
+- `BubblePacks.java` : export depuis identifiant racine, parcours itératif avec ensemble visité (cycles/partages), paquet ZIP `bubble.json` + `media/*.jpg` ; limites 400 nœuds, 500 entrées, 5 Mo descriptif, 16 Mo/photo, 100 Mo total. Export et import hors ligne via ContentResolver/SAF, aucun Base64.
+- `MainActivity.java` : requêtes 105/106, saisie des identifiants de contexte avant sélecteur Android et conservation dans instance state. Boutons « Télécharger cette bulle et ses filles » / « Importer des bulles ici ». Import sans remplacement : clone des JSON existants, nouveaux UUID pour tous les nœuds, liens internes remappés, médias copiés sous noms distincts, racine ajoutée dans les enfants du parent cible. Ancienne restauration complète inchangée.
+- Vérification de schéma/kind, références fermées, chemins whitelistés, duplications et tailles avant mutation de graphe. Échec d'archive ne remplace pas le JSON existant ; les données locales restent privées.
+- Limites connues : copie/ZIP effectués sur thread UI (gros paquet peut figer l'écran), sauvegarde globale préexistante distincte et remplaçante, robustesse d'erreur d'écriture après validation à renforcer, interface de restauration non transactionnelle pour panne de stockage ; tests téléphone indispensables.

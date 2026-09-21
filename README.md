@@ -13,3 +13,8 @@ Ce contournement concerne uniquement le quota de stockage des artefacts Actions 
 Outils : JDK 17, Gradle 8.10.2, Android SDK 35. Construction locale : `gradle :app:assembleDebug -PbuildNumber=1`.
 
 Documents FAB Copilot : [brain.md](brain.md), [brainmap.md](brainmap.md), [debughistorical.md](debughistorical.md), [todo.md](todo.md).
+
+## Exporter / importer une procédure
+Une sauvegarde complète existe toujours : **Sauvegarder ma mémoire** puis **Restaurer une sauvegarde** (attention, cette restauration remplace la mémoire actuelle).
+En plus, **Télécharger cette bulle et ses filles** crée un paquet local .fabmap depuis la bulle affichée, y compris descendants, étapes et photos référencées. **Importer des bulles ici** rattache le paquet à la bulle courante sans écraser les existantes. Identifiants et médias sont remappés à l'import, une sous-bulle partagée est exportée une seule fois. Hors ligne ; aucun compte ni connexion entre personnes.
+Le sélecteur Android permet de choisir Téléchargements, stockage local ou un fournisseur de documents éventuellement configuré sur le téléphone. Il n'y a pas de téléchargement automatique depuis un serveur.

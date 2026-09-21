@@ -21,3 +21,10 @@
 - Run 35662113704, commit b6e849c5aba3bd20322a538203deb6ff91632363 : succès confirmé de l'installation SDK, Gradle, compilation et publication.
 - Release v0.1.0-b3 créée ; binaire FabMap-v0.1.0-b3-debug.apk, 27059 octets.
 - Cette validation CI ne démontre PAS la validité du parcours sur un téléphone. Tests humains à faire.
+
+## V0.2.0 — risques identifiés pré-build
+- La v0.1.0 exporte/restaure la mémoire **complète** ; restaurer écrase la carte courante. Confondre import et fusion causerait une perte de données. Ajout de deux opérations distinctes de paquet de bulles, import additif sous un parent sélectionné.
+- Graphe à parents multiples et cycles : export avec ensemble visité ; import recrée les références internes avec UUID afin de ne pas collisionner avec l'existant.
+- Paquets ZIP : interdire chemins arbitraires/entrées doublées, borner nombres et volumes, vérifier photos avant adoption ; à tester avec fichier corrompu.
+- L'interprétation de « probables » comme « procédures / bulles » reste une hypothèse explicite, pas une citation littérale de Fab.
+- Build CI, publication et vérifications Android 0.2.0 **non réalisés** au moment de ce commit ; ne pas annoncer d'APK prématurément.

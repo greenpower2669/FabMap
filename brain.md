@@ -26,3 +26,6 @@ Le runner Ubuntu dispose déjà de sdkmanager ; éviter l'action setup-android v
 
 ## CI — correction #2
 Sans setup-android, sdkmanager n'est pas dans le PATH. Trouver le binaire via le répertoire SDK préinstallé et définir ANDROID_HOME/ANDROID_SDK_ROOT explicitement.
+
+## Itération 0.2.0 — export/import de bulles (demande vocale à confirmer)
+Interprétation de « sauvegarde ou DL de probables » : sauvegarder/télécharger des bulles **et procédures** individuellement, en complément du ZIP de mémoire complète. Chaque paquet englobe tous ses descendants accessibles, étapes et photos ; import sous la bulle choisie **sans remplacer** la mémoire. Pas de réseau ni d'accès familial. Confirmation de la formulation à demander à Fab sans empêcher la réalisation de ce besoin compatible avec le concept.

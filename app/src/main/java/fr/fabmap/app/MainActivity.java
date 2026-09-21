@@ -32,7 +32,8 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 public class MainActivity extends Activity {
-    private static final int PICK_IMAGE=101, TAKE_PHOTO=102, EXPORT=103, IMPORT=104;
+    private static final int PICK_IMAGE=101, TAKE_PHOTO=102, EXPORT=103, IMPORT=104, EXPORT_BUBBLE=105, IMPORT_BUBBLE=106;
+    private String pendingExportBubble, pendingImportParent;
     private final ArrayList<String> path=new ArrayList<>();
     private JSONObject data, nodes;
     private LinearLayout screen;
@@ -54,12 +55,15 @@ public class MainActivity extends Activity {
     @Override public void onCreate(Bundle b){
         super.onCreate(b);getWindow().setStatusBarColor(ink);getWindow().setNavigationBarColor(ink);
         mediaDir=new File(getFilesDir(),"media");mediaDir.mkdirs();load();
-        if(b!=null){ArrayList<String> old=b.getStringArrayList("path");if(old!=null)for(String id:old)if(obj(id)!=null)path.add(id);}
+        if(b!=null){ArrayList<String> old=b.getStringArrayList("path");if(old!=null)for(String id:old)if(obj(id)!=null)path.add(id);
+            pendingExportBubble=b.getString("exportBubble");pendingImportParent=b.getString("importParent");}
         if(path.isEmpty())path.add("home");
         voice=new TextToSpeech(this,status->{if(status==TextToSpeech.SUCCESS)voice.setLanguage(Locale.FRENCH);});
         show();
     }
-    @Override protected void onSaveInstanceState(Bundle b){b.putStringArrayList("path",new ArrayList<>(path));super.onSaveInstanceState(b);}
+    @Override protected void onSaveInstanceState(Bundle b){b.putStringArrayList("path",new ArrayList<>(path));
+        b.putString("exportBubble",pendingExportBubble);b.putString("importParent",pendingImportParent);
+        super.onSaveInstanceState(b);}
     private byte[] read(InputStream in,int max)throws IOException{
         ByteArrayOutputStream out=new ByteArrayOutputStream();byte[] buf=new byte[8192];int n,total=0;
         while((n=in.read(buf))!=-1){total+=n;if(total>max)throw new IOException("Fichier trop volumineux");out.write(buf,0,n);}
@@ -176,6 +180,8 @@ public class MainActivity extends Activity {
             i.addCategory(Intent.CATEGORY_OPENABLE);i.putExtra(Intent.EXTRA_TITLE,"FabMap-sauvegarde.fabmap");
             startActivityForResult(i,EXPORT);
         });
+        button(body,"⬇ Télécharger cette bulle et ses filles",this::exportCurrentBubble);
+        button(body,"⬆ Importer des bulles ici",this::importIntoCurrent);
         button(body,"📂 Restaurer une sauvegarde",()->new AlertDialog.Builder(this)
             .setMessage("Restaurer remplacera les bulles actuelles. Avez-vous déjà exporté une sauvegarde ?")
             .setNegativeButton("Annuler",null).setPositiveButton("Choisir le fichier",(d,w)->{
@@ -198,6 +204,26 @@ public class MainActivity extends Activity {
                 a.put(text);save();show();
             }));
         }
+    }
+    private void exportCurrentBubble(){
+        pendingExportBubble=here();
+        Intent i=new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        i.setType("application/zip");i.addCategory(Intent.CATEGORY_OPENABLE);
+        String title=current().optString("title","bulle").replaceAll("[^\\\\p{L}\\\\p{N}_-]+","-");
+        i.putExtra(Intent.EXTRA_TITLE,"FabMap-"+title+".fabmap");
+        startActivityForResult(i,EXPORT_BUBBLE);
+    }
+    private void importIntoCurrent(){
+        String destination=here();
+        new AlertDialog.Builder(this).setTitle("Ajouter des bulles")
+            .setMessage("Le paquet sera ajouté sous « "+current().optString("title")+" ». Vos bulles existantes seront conservées.")
+            .setNegativeButton("Annuler",null)
+            .setPositiveButton("Choisir le fichier",(d,w)->{
+                pendingImportParent=destination;
+                Intent i=new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                i.setType("*/*");i.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(i,IMPORT_BUBBLE);
+            }).show();
     }
     private interface Answer{void use(String s);}
     private void input(String title,String hint,Answer callback){
@@ -252,6 +278,23 @@ public class MainActivity extends Activity {
                 }p(current(),"photo",name);save();show();
             }else if(req==EXPORT){exportTo(intent.getData());Toast.makeText(this,"Sauvegarde créée",Toast.LENGTH_LONG).show();}
             else if(req==IMPORT){importFrom(intent.getData());Toast.makeText(this,"Mémoire restaurée",Toast.LENGTH_LONG).show();show();}
+            else if(req==EXPORT_BUBBLE){
+                String root=pendingExportBubble;pendingExportBubble=null;
+                try(OutputStream out=getContentResolver().openOutputStream(intent.getData())){
+                    if(out==null)throw new IOException("Fichier inaccessible");
+                    BubblePacks.exportPack(nodes,root,mediaDir,out);
+                }
+                Toast.makeText(this,"Bulle téléchargée avec ses filles",Toast.LENGTH_LONG).show();
+            }else if(req==IMPORT_BUBBLE){
+                String parent=pendingImportParent;pendingImportParent=null;
+                JSONObject merged;
+                try(InputStream in=getContentResolver().openInputStream(intent.getData())){
+                    if(in==null)throw new IOException("Fichier inaccessible");
+                    merged=BubblePacks.importPack(in,nodes,parent,mediaDir,getCacheDir());
+                }
+                p(data,"nodes",merged);nodes=merged;save();show();
+                Toast.makeText(this,"Bulles ajoutées sans effacer la mémoire",Toast.LENGTH_LONG).show();
+            }
         }catch(Exception ex){Toast.makeText(this,"Opération impossible : "+ex.getMessage(),Toast.LENGTH_LONG).show();}
     }
     private void exportTo(Uri uri)throws IOException{
