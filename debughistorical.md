@@ -16,3 +16,8 @@
 ## Run #2 — échec distinct
 - Run 35662052714 : 'sdkmanager: command not found' ; setup-android supprimé, donc l'outil n'est plus dans PATH. Gradle et Java n'ont pas été exécutés.
 - Correction : localisation explicite du SDK préinstallé depuis son emplacement vérifié au run #1, variables SDK définies ; téléchargement uniquement si composants manquants. À revérifier sur run #3.
+
+## Run #3 — correctif SDK validé sur CI
+- Run 35662113704, commit b6e849c5aba3bd20322a538203deb6ff91632363 : succès confirmé de l'installation SDK, Gradle, compilation et publication.
+- Release v0.1.0-b3 créée ; binaire FabMap-v0.1.0-b3-debug.apk, 27059 octets.
+- Cette validation CI ne démontre PAS la validité du parcours sur un téléphone. Tests humains à faire.

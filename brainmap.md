@@ -26,3 +26,6 @@ Premier run : setup-android@v3 a échoué sur 'Failed to find package tools' ava
 
 ## Diagnostic run #2
 Le runner contient un SDK à /usr/local/lib/android/sdk d'après run #1, mais la commande sdkmanager n'est pas dans PATH sans setup-android ; utiliser find sur cmdline-tools et sdk_root explicite ; vérifier que platforms/android-35 et build-tools/35.0.0 sont présents avant l'installation.
+
+## État de livraison vérifié
+Le run #3 du commit b6e849c5aba3bd20322a538203deb6ff91632363 a compilé :app:assembleDebug puis publié la pré-release v0.1.0-b3 (APK de 27059 octets). Il valide le canal sans upload-artifact ; il ne valide pas l'usage sur téléphone ni la signature d'une future mise à jour.

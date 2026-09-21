@@ -19,3 +19,10 @@ Examiner le premier run Actions et corriger ce qui bloque avec les quatre mémoi
 
 ## Run #2
 Run 35662052714 : échec SDK manager absent du PATH. Localisation explicite du binaire ajoutée ; prochain run et liens de release à contrôler. Aucun APK disponible au moment de ce constat.
+
+## Livraison CI vérifiée
+- Run #3 : https://github.com/greenpower2669/FabMap/actions/runs/35662113704 — **success**, compilation APK et création GitHub Release réussies.
+- Pré-release : https://github.com/greenpower2669/FabMap/releases/tag/v0.1.0-b3
+- APK direct : https://github.com/greenpower2669/FabMap/releases/download/v0.1.0-b3/FabMap-v0.1.0-b3-debug.apk
+- Taille GitHub confirmée : 27059 octets ; aucune installation ni essai utilisateur sur téléphone encore effectués.
+- Prochaine action humaine : exporter l'ancienne sauvegarde avant changement de build signée debug, installer et tester les gestes principaux.
