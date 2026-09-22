@@ -54,3 +54,10 @@
 
 ### Run #7 — correctif Java et Release vérifiés
 - https://github.com/greenpower2669/FabMap/actions/runs/35748911214 : compilation, étapes SDK et publication réussies après correction du Listener ; v0.4.0-b7, APK 43775 octets. Aucun test instrumental Android ou utilisateur n'a été exécuté.
+
+## Demande Fab 2026-09-22 — clarifications avant code / upload humain
+- **Portée exacte** : mettre à jour les quatre `.md` seulement. Ni APK, ni modification de `MainActivity`, ni commit de PNG, ni déplacement d'images dans ce cycle. Ne pas présenter les 7 planches comme déjà disponibles dans le dépôt : l'inventaire Git actuel ne contient que l'icône Android `fabmap_icon.xml`, pas les boards PNG.
+- **Risque de perte de planches / noms approximatifs** : sept planches en conversation : thèmes, actions, états, navigation, procédure, bulles, repérage ; 8 images conceptuelles légendées par planche. Établir noms et ordre stables lorsque Fab les déposera en binaire sur `main` ; vérifier les sept chemins et ne jamais supposer que les chemins proposés sont les chemins effectifs.
+- **Risque d'APK lourd/lag** : ne pas mettre sept posters complets et tous leurs libellés dans chaque nœud ni convertir en Base64 ; découper/optimiser après réception, charger les ressources nécessaires. Les PNG master ne sont pas des vecteurs SVG et n'entrent pas automatiquement dans la build Android.
+- **Risque de faux sens de « bulles simples liées à chacune au moins une fois »** : documenter une bulle par notion et un lien pour chaque usage visuel, partager les nœuds homonymes si pertinent ; ne pas générer de bulles de remplissage dans les zones vides.
+- **Correction du scénario TV historique** : le texte de démonstration `chaines.steps` parle d'appuyer sur SOURCE puis d'entrer dans la box ; Fab donne maintenant son parcours réel : ON/OFF de la TV, puis HDMI3 **si** vue de chaînes payantes/autres, ou ON/OFF télécommande portant « TV » **si** écran noir, puis attendre l'affichage parfois long. L'ancien texte est obsolète pour ce cas, mais **n'a pas encore été modifié** ; ne pas écraser une carte existante ni inventer le bouton qui mène à HDMI3. À vérifier en situation réelle.

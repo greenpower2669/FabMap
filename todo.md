@@ -63,3 +63,12 @@ Run 35662052714 : échec SDK manager absent du PATH. Localisation explicite du b
 - Run #7 : https://github.com/greenpower2669/FabMap/actions/runs/35748911214 — success, compilation APK et création GitHub Release.
 - Page https://github.com/greenpower2669/FabMap/releases/tag/v0.4.0-b7 ; APK direct https://github.com/greenpower2669/FabMap/releases/download/v0.4.0-b7/FabMap-v0.4.0-b7-debug.apk (43 775 octets).
 - Reste impératif : test humain sur téléphone, fluidité/pan, lisibilité et geste vocal B, sauvegarde complète avant toute désinstallation de build debug antérieure.
+
+## 2026-09-22 — préparation demandée : planches, bulles, vraie TV (AUCUN CODE)
+- [x] Consigner les sept planches et leurs 56 emplacements : thèmes, actions, états, navigation, procédure, bulles, repérage, dans l'ordre provisoire de création ; garder l'ordre définitif à organiser avec Fab.
+- [x] Consigner le parcours TV réel avec les deux branches conditionnelles et l'attente sans durée inventée ; noter que le scénario SOURCE de démonstration reste à remplacer prudemment.
+- [x] Décrire le futur catalogue de bulles simples : 7 bulles de famille et une association à chacune des 56 icônes au moins une fois ; réutiliser les mêmes bulles pour notions partagées, sans bulles dans le vide.
+- [ ] **Relais Fab :** téléverser lui-même les sept planches PNG sur la branche GitHub `main`, emplacement proposé `assets/icons/boards/`, avec `01-themes.png`, `02-actions.png`, `03-etats.png`, `04-navigation.png`, `05-procedure.png`, `06-bulles.png`, `07-reperage.png`. Si noms ou répertoire différents, attendre ses chemins exacts plutôt que déplacer à l'aveugle.
+- [ ] Une fois son upload terminé : vérifier les sept PNG et leur ordre effectif dans Git, puis lui demander accord pour découpage/optimisation/intégration des icônes et création effective des bulles. Garder les masters ; aucune grosse image Base64 ; ne pas publier d'APK pour la mise à jour documentaire seule.
+- [ ] Prévoir après feu vert une procédure « Allumer la télévision » importable ou migrée sans effacer les mémoires existantes ; vérifier avec Fab comment trouver HDMI3 avant d'inventer toute touche ou interaction.
+- [ ] Tests ultérieurs : appui long B, accessibilité des icônes et textes, tailles APK, temps de rendu de la Vallée, liens partagés, procédure TV sur l'appareil réel.

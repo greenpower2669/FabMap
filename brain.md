@@ -48,3 +48,17 @@ Premier build échoué dans Java (initialisation d'un Listener dans un Runnable 
 
 ### Livraison 0.4.0
 La compilation Android et la Release du prototype Vallée des bulles v0.4.0-b7 ont été vérifiées sur CI ; les gestes et les performances sur téléphone restent non testés.
+
+## Préparation suivante — planches d'icônes et procédure TV réelle (décision de Fab, 2026-09-22)
+**Mode de travail demandé : documentation uniquement maintenant.** Ne pas coder, ne pas modifier les données initiales, ne pas déplacer ni téléverser les planches à la place de Fab. Fab préfère téléverser lui-même les PNG binaires sur la branche `main` ; attendre son signal et contrôler les chemins du dépôt avant toute intégration.
+
+**Inventaire à préserver : sept planches conceptuelles produites dans la conversation, chacune avec huit pictogrammes légendés (56 emplacements visuels, notions récurrentes possibles).** Dans l'ordre provisoire de création : 01 Thèmes (Maison, Grande pièce, Télévision, Télécommande, Cuisine, Santé, Famille, Musique) ; 02 Actions (Écouter, Rechercher, Sauvegarder, Télécharger, Importer, Modifier, Photo, Recentrer) ; 03 États (Validé, Favori, Important, À écouter, Partagée, Sous-bulles, En cours, Terminé) ; 04 Navigation (Accueil, Retour, Ouvrir, Fermer, Zoomer, Dézoomer, Aide, Réécouter) ; 05 Procédure (Étape, Consigne, Liste, Ordre, Minuteur, Refaire, Cocher, Terminer) ; 06 Bulles (Bulle, Bulle mère, Sous-bulle, Bulle liée, Bulle favorite, Bulle photo, Bulle audio, Bulle procédure) ; 07 Repérage (Favori, Important, À voir, À faire, À écouter, En cours, Urgent, Souvenir). **L'ordre définitif reste à organiser avec Fab** ; ne pas confondre l'inventaire de planches avec des ressources d'APK déjà intégrées.
+
+**Bulles de démonstration à créer plus tard, pas dans ce commit :** un catalogue « Icônes FabMap » avec une bulle simple pour chacun des sept thèmes de planche et au moins un lien vers une bulle réelle par chacun des 56 emplacements d'icône, sans recopier une même notion en plusieurs nœuds lorsqu'elle est réutilisable. Les bulles peuvent porter titre + icône + lecture vocale/aperçu B ; elles doivent rester consultables dans le mode guidé comme dans la Vallée. Ce sont des bulles réelles créées volontairement dans la mémoire, jamais des bulles inventées pour combler l'espace vide de la carte.
+
+**Procédure réelle « Allumer la télévision » donnée par Fab (à implémenter après son feu vert ; supplante la démonstration SOURCE/chaînes fictive actuelle) :**
+1. Allumer la TV avec la télécommande, au moyen du bouton ON/OFF indiqué dessus.
+2. Si l'écran arrive sur la vue des chaînes payantes et autres, chercher/sélectionner **HDMI3**.
+3. Si l'écran est noir, reprendre la télécommande TV, celle dont le bouton ON/OFF porte « TV » à côté, puis appuyer sur ce bouton.
+4. Attendre l'affichage : il peut parfois être long.
+Ces chemins sont **conditionnels** ; ne pas présenter HDMI3 et le second appui ON/OFF comme deux gestes obligatoires l'un après l'autre. Fab n'a pas précisé le détail des touches pour accéder à HDMI3 ; ne pas inventer de touche SOURCE, de branche supplémentaire ou de délai chiffré. Conserver strictement ses termes avant essai sur sa télévision.
