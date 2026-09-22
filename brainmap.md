@@ -45,3 +45,6 @@ Le run 35665143325 compile le nouveau `BubblePacks.java` avec MainActivity et pu
 - Les bulles ont leur OnClick zoom d'origine ET leur appui long consultatif, sans mutation de path, step, edit ni données.
 - La section des étapes appelle button(..., true) pour la validation verte. Les autres boutons passent tous par button(...) pour harmoniser l'appui long.
 - Limites de validation : comportement TalkBack et ergonomie petit écran à essayer en main réelle ; aucun test instrumenté d'accessibilité encore.
+
+## État CI 0.3.0
+Le run #5 (35694822501) du commit ff16e57a88608145aeacaa3b5b10ce80084d10fe a compilé le nouveau comportement et publié v0.3.0-b5 en Release directe, sans upload-artifact.

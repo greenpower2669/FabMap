@@ -38,3 +38,7 @@
 - Risque : prévisualisation modifiant la pile de navigation ; showPreview est une fenêtre modale, sans zoom ni changement de path ou step.
 - Une fenêtre de lecture reste affichée après le relâchement, et le bouton « Réécouter » ne la ferme pas ; la fermeture arrête la synthèse.
 - CI et vrai test téléphone à vérifier après commit ; ne pas annoncer l'APK avant preuve de Release.
+
+## Run #5 — livraison 0.3.0 confirmée
+- Workflow 35694822501 : JDK, SDK, Gradle, assembleDebug et gh release create réussis ; APK direct de test v0.3.0-b5 (34723 octets).
+- Cela prouve la compilation et la publication, non le ressenti tactile, l'ergonomie ou la lecture effective sur téléphone.
