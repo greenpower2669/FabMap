@@ -2,6 +2,7 @@ package fr.fabmap.app;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Handler;
@@ -26,10 +27,10 @@ final class BubbleValleyView extends View {
     private static final int CAP=160;
     private static final int[] COLORS={0xff3C72B2,0xff298B75,0xff9564AE,0xffAD7142,0xffAD5A7C,0xff428C9B,0xff898D42};
     private static final class Bubble {
-        final String id,title,detail;final int depth,color;final float r;
+        final String id,title,detail,icon;final int depth,color;final float r;
         float x,y;
-        Bubble(String id,String title,String detail,int depth,int color,float x,float y) {
-            this.id=id;this.title=title;this.detail=detail;this.depth=depth;this.color=color;
+        Bubble(String id,String title,String detail,String icon,int depth,int color,float x,float y) {
+            this.id=id;this.title=title;this.detail=detail;this.icon=icon;this.depth=depth;this.color=color;
             this.x=x;this.y=y;this.r=depth==0?86:72;
         }
     }
@@ -43,6 +44,7 @@ final class BubbleValleyView extends View {
     private final Paint paint=new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Handler handler=new Handler(Looper.getMainLooper());
     private Listener listener;
+    private final IconAssets iconAssets;
     private final ScaleGestureDetector pinch;
     private final float density,slop;
     private float minX=-130,maxX=130,minY=-130,maxY=130;
@@ -50,8 +52,8 @@ final class BubbleValleyView extends View {
     private Bubble down;
     private boolean moved,longPressed,pinching,limitReached;
 
-    BubbleValleyView(Context context,JSONObject nodes,String root,Listener listener) {
-        super(context);this.listener=listener;
+    BubbleValleyView(Context context,JSONObject nodes,String root,IconAssets icons,Listener listener) {
+        super(context);this.listener=listener;this.iconAssets=icons;
         density=getResources().getDisplayMetrics().density;
         slop=ViewConfiguration.get(context).getScaledTouchSlop();
         build(nodes,root);
@@ -78,7 +80,7 @@ final class BubbleValleyView extends View {
     private void build(JSONObject graph,String rootId) {
         JSONObject first=graph.optJSONObject(rootId);
         if(first==null)return;
-        Bubble center=new Bubble(rootId,first.optString("title","Bulle"),first.optString("description",""),0,0xff315D97,0,0);
+        Bubble center=new Bubble(rootId,first.optString("title","Bulle"),first.optString("description",""),first.optString("icon",""),0,0xff315D97,0,0);
         all.add(center);indexed.put(rootId,center);
         ArrayDeque<Bubble> queue=new ArrayDeque<>();queue.add(center);
         while(!queue.isEmpty()&&all.size()<CAP) {
@@ -96,7 +98,7 @@ final class BubbleValleyView extends View {
                 float distance=parent.depth==0?330:180;
                 float startX=parent.x+(float)Math.cos(a)*distance;
                 float startY=parent.y+(float)Math.sin(a)*distance;
-                Bubble next=new Bubble(id,child.optString("title","Bulle"),child.optString("description",""),depth,color,startX,startY);
+                Bubble next=new Bubble(id,child.optString("title","Bulle"),child.optString("description",""),child.optString("icon",""),depth,color,startX,startY);
                 // Reposition only the incoming bubble; older positions remain unchanged.
                 for(int attempt=0;attempt<90;attempt++){
                     boolean collision=false;
@@ -175,6 +177,11 @@ final class BubbleValleyView extends View {
             paint.setColor((b.color&0xffffff)|0x50000000);c.drawCircle(x,y,r+px(11),paint);
             paint.setColor(b.color);c.drawCircle(x,y,r,paint);
             if(scale<.43f)continue;
+            Bitmap itemIcon=iconAssets.get(b.icon);
+            if(itemIcon!=null){float side=r*.86f;
+                paint.setColor(Color.WHITE);
+                c.drawBitmap(itemIcon,null,new android.graphics.RectF(x-side/2f,y-r*.80f,x+side/2f,y-r*.80f+side),paint);
+            }
             paint.setColor(Color.WHITE);
             paint.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
             paint.setTextSize(density*Math.max(11,Math.min(19,16*scale)));

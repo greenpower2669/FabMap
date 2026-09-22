@@ -62,3 +62,16 @@ La compilation Android et la Release du prototype Vallée des bulles v0.4.0-b7 o
 3. Si l'écran est noir, reprendre la télécommande TV, celle dont le bouton ON/OFF porte « TV » à côté, puis appuyer sur ce bouton.
 4. Attendre l'affichage : il peut parfois être long.
 Ces chemins sont **conditionnels** ; ne pas présenter HDMI3 et le second appui ON/OFF comme deux gestes obligatoires l'un après l'autre. Fab n'a pas précisé le détail des touches pour accéder à HDMI3 ; ne pas inventer de touche SOURCE, de branche supplémentaire ou de délai chiffré. Conserver strictement ses termes avant essai sur sa télévision.
+
+## 0.5.0 — PENSE-BÊTE CONTRACTUEL DES ICÔNES (relire avant toute modification)
+Une icône accompagne toujours un titre et ne le remplace jamais ; l'appui long vocal B et le mode guidé restent disponibles. Une icône est une association à une bulle **existante**, jamais une bulle inventée dans une zone vide. Un même nom conceptuel peut être relié depuis plusieurs planches : ne pas fabriquer des significations contradictoires ; les bulles peuvent être liées sans dupliquer leur contenu utilisateur. Paires import/export : la sauvegarde complète inclut toutes les images personnelles stockées en media ; exporter une branche inclut uniquement les images personnelles utilisées dans ses descendants, sans Base64 et sans recopier les icônes built-in livrées avec l'application.
+**Ordre canonique, indexes 0–7 des planches 01–07 :**
+01 Thèmes : Maison ; Grande pièce ; Télévision ; Télécommande ; Cuisine ; Santé ; Famille ; Musique.
+02 Actions : Écouter ; Rechercher ; Sauvegarder ; Télécharger ; Importer ; Modifier ; Photo ; Recentrer.
+03 États : Validé ; Favori ; Important ; À écouter ; Partagée ; Sous-bulles ; En cours ; Terminé.
+04 Navigation : Retour ; Accueil ; Zoomer ; Dézoomer ; Explorer ; Déplacer ; Ouvrir ; Fermer.
+05 Procédure : Étape ; Choix ; Attendre ; Appuyer ; Allumer ; HDMI3 ; Télécommande TV ; C'est fait.
+06 Bulles : Bulle simple ; Bulle parent ; Bulle fille ; Bulle liée ; Bulle photo ; Bulle procédure ; Bulle parlante ; Bulle favorite.
+07 Repérage : Ici ; À gauche ; À droite ; En haut ; En bas ; À côté ; Devant ; Derrière.
+Cette liste représente **les nouvelles planches complémentaires effectivement montrées** ; la première liste préparatoire pour 04–07 est désormais remplacée par ce contenu observé. Plusieurs concepts sont répétables, la source et l'index sont déterminants. **Fichiers maîtres réellement observés dans Git avant ce cycle :** trois PNG opaques à la racine, identifiés par leur correspondance de génération (01 a778..., 02 9080..., 03 6f648...). Ils sont copiés sous `assets/icons/boards/01-themes.png`, `02-actions.png`, `03-etats.png`; les quatre autres ne sont PAS téléversés dans le dépôt. Fab garde le contrôle des uploads des quatre autres sur main. Les fichiers source ne sont pas redessinés/encodés en Base64.
+**Vraie procédure TV** : ON/OFF de la télécommande ; si vue chaînes payantes/autres → HDMI3 ; si écran noir → télécommande TV ON/OFF avec TV à côté, puis attendre, parfois long. Les branches ne sont pas séquentielles, ne pas inventer de touche SOURCE ni de durée.

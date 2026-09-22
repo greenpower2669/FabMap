@@ -72,3 +72,13 @@ Run 35662052714 : échec SDK manager absent du PATH. Localisation explicite du b
 - [ ] Une fois son upload terminé : vérifier les sept PNG et leur ordre effectif dans Git, puis lui demander accord pour découpage/optimisation/intégration des icônes et création effective des bulles. Garder les masters ; aucune grosse image Base64 ; ne pas publier d'APK pour la mise à jour documentaire seule.
 - [ ] Prévoir après feu vert une procédure « Allumer la télévision » importable ou migrée sans effacer les mémoires existantes ; vérifier avec Fab comment trouver HDMI3 avant d'inventer toute touche ou interaction.
 - [ ] Tests ultérieurs : appui long B, accessibilité des icônes et textes, tailles APK, temps de rendu de la Vallée, liens partagés, procédure TV sur l'appareil réel.
+
+## 0.5.0 — icônes et autonomie utilisateur
+- [x] Classer les trois premiers PNG de Fab en blobs originaux sous assets/icons/boards/ ; ajouter l'extracteur JDK pour ne packager que des PNG 144px.
+- [x] Pense-bête indexé des sept planches réellement dessinées dans brain.md, distinction images présentes/à téléverser et concepts éventuellement répétés.
+- [x] Ajouter le choix d'icônes des planches présentes, ajout d'icône utilisateur, retrait, stockage JPEG privé, rendu guidé + Vallée.
+- [x] Export/import branche avec icônes custom et références remappées ; sauvegarde complète media/ avec validation d'icônes ; anciens ZIP toujours admissibles.
+- [x] Catalogue volontaire de sept familles / 56 bulles et ajout distinct de la procédure TV réelle sous la télé de démonstration, sans écraser les cartes personnelles.
+- [ ] Vérifier CI Java extracteur et APK Release, réparer tout échec avec les quatre mémoires dans le même commit.
+- [ ] Fab upload en binaire les planches 04–07 dans assets/icons/boards/ avec noms conventionnels ; vérifier les dimensions/cadrage réel et ajuster l'extracteur sans perdre les masters.
+- [ ] Tests sur vrai téléphone : fluidité Canvas, lisibilité des icônes 44/86 dp, import perso et sauvegarde complète, export/import branche d'une même icône utilisée deux fois, ZIP v0.4, dialogue retour/validation, simulation de stockage insuffisant.

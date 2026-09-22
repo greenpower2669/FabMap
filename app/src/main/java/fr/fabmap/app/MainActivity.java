@@ -32,8 +32,8 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 public class MainActivity extends Activity {
-    private static final int PICK_IMAGE=101, TAKE_PHOTO=102, EXPORT=103, IMPORT=104, EXPORT_BUBBLE=105, IMPORT_BUBBLE=106;
-    private String pendingExportBubble, pendingImportParent;
+    private static final int PICK_IMAGE=101, TAKE_PHOTO=102, EXPORT=103, IMPORT=104, EXPORT_BUBBLE=105, IMPORT_BUBBLE=106, PICK_ICON=107;
+    private String pendingExportBubble, pendingImportParent, pendingIconBubble;
     private final ArrayList<String> path=new ArrayList<>();
     private JSONObject data, nodes;
     private LinearLayout screen;
@@ -42,6 +42,7 @@ public class MainActivity extends Activity {
     private int step=0;
     private final int ink=Color.rgb(27,55,87), blue=Color.rgb(218,234,255);
     private File mediaDir;
+    private IconAssets iconAssets;
     private int dp(int n){return (int)(n*getResources().getDisplayMetrics().density+0.5f);}
     private JSONObject obj(String id){return nodes.optJSONObject(id);}
     private String here(){return path.get(path.size()-1);}
@@ -54,15 +55,15 @@ public class MainActivity extends Activity {
     }
     @Override public void onCreate(Bundle b){
         super.onCreate(b);getWindow().setStatusBarColor(ink);getWindow().setNavigationBarColor(ink);
-        mediaDir=new File(getFilesDir(),"media");mediaDir.mkdirs();load();
+        mediaDir=new File(getFilesDir(),"media");mediaDir.mkdirs();iconAssets=new IconAssets(this,mediaDir);load();
         if(b!=null){ArrayList<String> old=b.getStringArrayList("path");if(old!=null)for(String id:old)if(obj(id)!=null)path.add(id);
-            pendingExportBubble=b.getString("exportBubble");pendingImportParent=b.getString("importParent");valley=b.getBoolean("valley",false);}
+            pendingExportBubble=b.getString("exportBubble");pendingImportParent=b.getString("importParent");valley=b.getBoolean("valley",false);pendingIconBubble=b.getString("iconBubble");}
         if(path.isEmpty())path.add("home");
         voice=new TextToSpeech(this,status->{if(status==TextToSpeech.SUCCESS)voice.setLanguage(Locale.FRENCH);});
         show();
     }
     @Override protected void onSaveInstanceState(Bundle b){b.putStringArrayList("path",new ArrayList<>(path));
-        b.putString("exportBubble",pendingExportBubble);b.putString("importParent",pendingImportParent);b.putBoolean("valley",valley);
+        b.putString("exportBubble",pendingExportBubble);b.putString("importParent",pendingImportParent);b.putBoolean("valley",valley);b.putString("iconBubble",pendingIconBubble);
         super.onSaveInstanceState(b);}
     private byte[] read(InputStream in,int max)throws IOException{
         ByteArrayOutputStream out=new ByteArrayOutputStream();byte[] buf=new byte[8192];int n,total=0;
@@ -189,6 +190,8 @@ public class MainActivity extends Activity {
         TextView breadcrumb=label(crumbs.toString(),13,false);add(screen,breadcrumb);
         ScrollView scroll=new ScrollView(this);screen.addView(scroll,new LinearLayout.LayoutParams(-1,0,1));
         LinearLayout body=column();scroll.addView(body);
+        ImageView iconView=iconAssets.view(n.optString("icon",""),86);
+        if(iconView!=null){iconView.setContentDescription("Icône de "+n.optString("title","Bulle"));add(body,iconView);}
         add(body,label(n.optString("title","Bulle"),27,true));
         button(body,"🫧 Explorer la Vallée des bulles (2D)",()->{valley=true;show();});
         String desc=n.optString("description","");if(!desc.isEmpty()){add(body,label(desc,19,false));button(body,"🔊 Écouter",()->say(desc));}
@@ -210,6 +213,8 @@ public class MainActivity extends Activity {
             for(int j=start;j<Math.min(start+2,Math.min(count,expanded?count:4));j++){
                 String id=children.optString(j);JSONObject child=obj(id);if(child==null)continue;
                 TextView bubble=label(child.optString("title"),18,true);bubble.setGravity(Gravity.CENTER);
+                android.graphics.drawable.Drawable little=iconAssets.drawable(child.optString("icon",""),44);
+                if(little!=null){bubble.setCompoundDrawables(null,little,null,null);bubble.setCompoundDrawablePadding(dp(5));}
                 bubble.setBackground(bg((j%4==0)?blue:(j%4==1?0xffe0f4e8:(j%4==2?0xfff6e6ff:0xffffefd8)),true));
                 LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(0,dp(140),1);lp.setMargins(dp(5),dp(6),dp(5),dp(6));row.addView(bubble,lp);
                 bubble.setOnClickListener(v->zoom(id));
@@ -247,6 +252,11 @@ public class MainActivity extends Activity {
             button(body,"🖼 Choisir une photo",()->{Intent i=new Intent(Intent.ACTION_OPEN_DOCUMENT);i.setType("image/*");
                 i.addCategory(Intent.CATEGORY_OPENABLE);startActivityForResult(i,PICK_IMAGE);
             });
+            button(body,"🎨 Choisir une icône pour cette bulle",this::chooseIcon);
+            if("home".equals(here())){
+                button(body,"🫧 Installer les bulles des icônes",this::installIconCatalog);
+            }
+            button(body,"📺 Installer la procédure TV réelle",this::installTvProcedure);
             button(body,"＋ Ajouter une étape",()->input("Nouvelle étape","Instruction",text->{
                 JSONArray a=current().optJSONArray("steps");if(a==null){a=new JSONArray();p(current(),"steps",a);}
                 a.put(text);save();show();
@@ -271,7 +281,7 @@ public class MainActivity extends Activity {
         button(screen,"‹ Revenir au mode guidé",()->{valley=false;show();});
         add(screen,label("🫧 Vallée : "+current().optString("title","Ma mémoire"),23,true));
         add(screen,label("Bulles réelles uniquement. Glisser, pincer pour zoomer ; maintenir pour écouter.",15,false));
-        BubbleValleyView map=new BubbleValleyView(this,nodes,here(),new BubbleValleyView.Listener(){
+        BubbleValleyView map=new BubbleValleyView(this,nodes,here(),iconAssets,new BubbleValleyView.Listener(){
             @Override public void open(String id){
                 valley=false;
                 if(!here().equals(id))zoom(id);else show();
@@ -288,6 +298,64 @@ public class MainActivity extends Activity {
         controls.addView(valleyControl("＋ Zoomer",()->map.zoomBy(1.33f)),right);
         add(screen,controls);
         button(screen,"◎ Recentrer sur les bulles",map::reset);
+    }
+    private void chooseIcon(){
+        final String nodeId=here();
+        ArrayList<IconAssets.Option> options=iconAssets.options();
+        ArrayList<String> labels=new ArrayList<>();
+        for(IconAssets.Option option:options)labels.add(option.label);
+        labels.add("＋ Ajouter une image personnelle");
+        labels.add("✕ Retirer l'icône de cette bulle");
+        new AlertDialog.Builder(this).setTitle("Icône de la bulle")
+            .setItems(labels.toArray(new String[0]),(dialog,index)->{
+                if(index<options.size()){
+                    p(obj(nodeId),"icon",options.get(index).id);save();show();
+                }else if(index==options.size()){
+                    pendingIconBubble=nodeId;
+                    Intent intent=new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType("image/*");
+                    startActivityForResult(intent,PICK_ICON);
+                }else{obj(nodeId).remove("icon");save();show();}
+            }).setNegativeButton("Annuler",null).show();
+    }
+    private void installIconCatalog(){
+        new AlertDialog.Builder(this).setTitle("Bulles des icônes")
+            .setMessage("Ajouter sept familles et leurs 56 bulles conceptuelles à l'accueil ? Les images des planches non encore téléversées apparaîtront plus tard ; les textes restent lisibles.")
+            .setNegativeButton("Annuler",null)
+            .setPositiveButton("Ajouter",(d,w)->{
+                if(IconAssets.installCatalog(nodes)){save();show();
+                    Toast.makeText(this,"Catalogue de bulles ajouté",Toast.LENGTH_LONG).show();}
+                else Toast.makeText(this,"Catalogue déjà présent",Toast.LENGTH_LONG).show();
+            }).show();
+    }
+    private void installTvProcedure(){
+        final JSONObject television=obj("tele");
+        if(television==null){Toast.makeText(this,"Bulle TV de démonstration absente",Toast.LENGTH_LONG).show();return;}
+        if(obj("fabmap-tv-real")!=null){Toast.makeText(this,"Procédure TV déjà présente",Toast.LENGTH_LONG).show();return;}
+        new AlertDialog.Builder(this).setTitle("Vraie procédure TV")
+            .setMessage("Ajouter la procédure réelle sous Ma télévision sans effacer tes anciennes bulles ?")
+            .setNegativeButton("Annuler",null)
+            .setPositiveButton("Ajouter",(d,w)->{
+                JSONObject start=node("fabmap-tv-real","Allumer la télévision",
+                    "Allumer, observer l'écran, puis choisir uniquement le cas rencontré.",
+                    "fabmap-tv-pay","fabmap-tv-black");
+                p(start,"icon","built:01-02");
+                p(start,"steps",arr("Allume la télévision avec la télécommande, au moyen du bouton ON/OFF indiqué dessus.",
+                    "Regarde ce qui apparaît à l'écran, puis ouvre la bulle correspondant à ton cas."));
+                JSONObject pay=node("fabmap-tv-pay","Vue des chaînes payantes et autres",
+                    "Ce choix s'applique seulement si cette vue apparaît.");
+                p(pay,"steps",arr("Cherche et sélectionne HDMI3.","Attends que l'affichage apparaisse. Cela peut parfois être long."));
+                JSONObject black=node("fabmap-tv-black","Écran noir",
+                    "Ce choix s'applique seulement lorsque l'écran est noir.");
+                p(black,"steps",arr("Reprends la télécommande TV, celle dont le bouton ON/OFF porte TV à côté.",
+                    "Appuie sur ce bouton ON/OFF.","Attends l'affichage. Cela peut parfois être long."));
+                p(nodes,"fabmap-tv-real",start);p(nodes,"fabmap-tv-pay",pay);p(nodes,"fabmap-tv-black",black);
+                JSONArray links=television.optJSONArray("children");
+                if(links==null){links=new JSONArray();p(television,"children",links);}
+                if(!contains(links,"fabmap-tv-real"))links.put("fabmap-tv-real");
+                save();show();
+            }).show();
     }
     private void exportCurrentBubble(){
         pendingExportBubble=here();
@@ -349,7 +417,17 @@ public class MainActivity extends Activity {
     @Override protected void onActivityResult(int req,int result,Intent intent){
         super.onActivityResult(req,result,intent);if(result!=RESULT_OK||intent==null)return;
         try{
-            if(req==TAKE_PHOTO){
+            if(req==PICK_ICON){
+                String nodeId=pendingIconBubble;pendingIconBubble=null;
+                JSONObject target=obj(nodeId);
+                if(target==null)throw new IOException("Bulle introuvable");
+                String icon;
+                try(InputStream in=getContentResolver().openInputStream(intent.getData())){
+                    icon=IconAssets.importCustom(in,mediaDir);
+                }
+                p(target,"icon",icon);save();show();
+                Toast.makeText(this,"Icône personnelle sauvegardée",Toast.LENGTH_LONG).show();
+            }else if(req==TAKE_PHOTO){
                 Bitmap b=(Bitmap)intent.getExtras().get("data");
                 if(b==null)throw new IOException("Photo indisponible");
                 String name=UUID.randomUUID()+".jpg";
@@ -384,6 +462,7 @@ public class MainActivity extends Activity {
     private void exportTo(Uri uri)throws IOException{
         try(ZipOutputStream zip=new ZipOutputStream(getContentResolver().openOutputStream(uri))){
             zip.putNextEntry(new ZipEntry("map.json"));zip.write(data.toString().getBytes(StandardCharsets.UTF_8));zip.closeEntry();
+            // Photos and personalized icons share media/ with distinct UUID .jpg names.
             File[] images=mediaDir.listFiles();if(images!=null)for(File f:images)if(f.isFile()&&f.getName().matches("[a-zA-Z0-9_-]+\\.jpg")){
                 zip.putNextEntry(new ZipEntry("media/"+f.getName()));
                 try(FileInputStream in=new FileInputStream(f)){byte[] buf=new byte[8192];int n;while((n=in.read(buf))!=-1)zip.write(buf,0,n);}
@@ -416,6 +495,9 @@ public class MainActivity extends Activity {
                 JSONObject n=importedNodes.optJSONObject(keys.next());if(n==null)throw new IOException("Bulle invalide");
                 JSONArray edges=n.optJSONArray("children");if(edges!=null)for(int i=0;i<edges.length();i++)
                     if(importedNodes.optJSONObject(edges.optString(i))==null)throw new IOException("Lien manquant");
+                String custom=n.optString("icon","");
+                if(IconAssets.customFile(custom)&&!new File(stage,custom.substring(7)).isFile())
+                    throw new IOException("Icône personnelle absente de la sauvegarde");
                 String photo=n.optString("photo","");
                 if(!photo.isEmpty()&&(!photo.matches("[a-zA-Z0-9_-]+\\.jpg")||!new File(stage,photo).exists()))
                     throw new IOException("Photo absente de l'archive");

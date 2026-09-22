@@ -64,6 +64,12 @@ final class BubblePacks {
                 if(!photoName(photo)||!new File(media,photo).isFile())throw new IOException("Photo manquante : "+photo);
                 photos.add(photo);
             }
+            String icon=node.optString("icon","");
+            if(IconAssets.customFile(icon)){
+                String filename=icon.substring(7);
+                if(!new File(media,filename).isFile())throw new IOException("Icône personnelle manquante : "+filename);
+                photos.add(filename);
+            }
             JSONArray children=node.optJSONArray("children");
             if(children!=null)for(int i=0;i<children.length();i++)waiting.add(children.optString(i));
         }
@@ -146,6 +152,14 @@ final class BubblePacks {
                         throw new IOException("Photo absente : "+oldPhoto);
                     if(!photoMap.containsKey(oldPhoto))photoMap.put(oldPhoto,UUID.randomUUID()+".jpg");
                     put(copy,"photo",photoMap.get(oldPhoto));
+                }
+                String originalIcon=sourceNode.optString("icon","");
+                if(IconAssets.customFile(originalIcon)){
+                    String oldIconName=originalIcon.substring(7);
+                    if(!new File(staged,oldIconName).isFile())
+                        throw new IOException("Icône personnelle absente : "+oldIconName);
+                    if(!photoMap.containsKey(oldIconName))photoMap.put(oldIconName,UUID.randomUUID()+".jpg");
+                    put(copy,"icon","custom:"+photoMap.get(oldIconName));
                 }
                 put(updated,idMap.get(oldId),copy);
             }
