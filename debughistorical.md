@@ -48,3 +48,6 @@
 - La proximité visuelle vient des liens parent/enfant existants et de placements déterministes ; NE PAS la présenter comme une distance de tokens IA/embedding. Aucun modèle lourd ni appel réseau.
 - Cartes >160 : seule la représentation Vallée est tronquée, pas les données/fiche guidée ; vérifier les arcs et collisions sur graphes cycliques/partagés.
 - Tests non faits au moment de ce commit : build 0.4.0, drag et pinçage sur appareil, appui long B, précision des touchers et TalkBack. Ne pas annoncer Release avant contrôle du run.
+
+### Run #6 — échec de compilation prouvé
+- https://github.com/greenpower2669/FabMap/actions/runs/35748705120 : SDK et Gradle réussis, échec compileDebugJavaWithJavac : BubbleValleyView.java:209 « variable listener might not have been initialized » ; gh release ignorée. Cause : Runnable de champ capturant un blank final assigné plus tard dans le constructeur. Correctif : rendre listener non-final ; aucune autre modification de logique.

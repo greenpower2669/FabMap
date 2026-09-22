@@ -55,3 +55,6 @@ Run 35662052714 : échec SDK manager absent du PATH. Localisation explicite du b
 - À vérifier après push : CI :app:assembleDebug, publication et URL APK directe, pas d'artefact Actions ; consigner résultats vérifiés dans les mémoires.
 - À tester sur téléphone : limite du déplacement sans vide infini, gros graphes, nœuds cycliques, liens partagés, gestes et appui long, retour guidé, grande police, TalkBack ; sauvegarder la mémoire avant toute désinstallation de la build debug.
 - Non réalisé : vrais embeddings/proximité sémantique d'IA, icônes spécifiques pour chaque thème, rendu 3D. Aucun code/asset massif dans l'APK.
+
+### CI 0.4.0 après run #6
+- Run #6 échec javac sur Listener final dans l'initialiseur de champ ; correctif appliqué avec les quatre mémoires. Nouveau run à vérifier ; aucune APK 0.4.0 publiée à cette étape.

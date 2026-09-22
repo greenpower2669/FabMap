@@ -56,3 +56,6 @@ Le run #5 (35694822501) du commit ff16e57a88608145aeacaa3b5b10ce80084d10fe a com
 - OnTouchEvent + ScaleGestureDetector : pan / pinch, appui long consumé via Handler et preview vocale B, tap sur bulle ouvre la fiche guidée existante ; le vide n'a aucune action créatrice. Boutons zoom et mode guidé accessibles hors Canvas.
 - MainActivity.java : flag valley conservé après rotation, entrée depuis chaque fiche ; vue Vallée remplace temporairement le contenu guidé sans changer le JSON. Les paquets et sauvegardes restent identiques.
 - Limites connues : positions calculées sur thread UI à ouverture, plafond 160 ; Canvas ne fournit pas un objet TalkBack individuel pour chaque bulle, donc préserver le parcours guidé. Aucun asset volumineux ajouté.
+
+### Dépendance d'initialisation réparée
+Le Runnable d'appui long défini comme champ accède à listener assigné dans le constructeur de BubbleValleyView. La déclaration de Listener n'est plus blank final, pour satisfaire l'analyse d'affectation de javac tout en gardant l'attribution avant toute interaction utilisateur.

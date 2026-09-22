@@ -42,7 +42,7 @@ final class BubbleValleyView extends View {
     private final ArrayList<Edge> edges=new ArrayList<>();
     private final Paint paint=new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Handler handler=new Handler(Looper.getMainLooper());
-    private final Listener listener;
+    private Listener listener;
     private final ScaleGestureDetector pinch;
     private final float density,slop;
     private float minX=-130,maxX=130,minY=-130,maxY=130;

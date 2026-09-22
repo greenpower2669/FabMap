@@ -42,3 +42,6 @@ Interprétation de « sauvegarde ou DL de probables » : sauvegarder/télécharg
 - Exploration spatiale bornée, glisser, pincer, zoom +/- et recentrer, groupes colorés par branche ; mode guidé intégralement conservé. Appui long B (agrandissement + voix) disponible sur les bulles cartographiées.
 - Prototype sans moteur 3D, modèle d'IA ou corpus vectoriel embarqué : proximité fondée sur les relations existantes et non sur de véritables embeddings sémantiques. Objectif central : APK petit et pas de lag.
 - Limite volontaire de la carte à 160 bulles affichées, sans suppression de mémoire ; le mode guidé ne subit pas cette limite.
+
+### État de compilation 0.4.0
+Premier build échoué dans Java (initialisation d'un Listener dans un Runnable de champ), correctif technique sans changement du contrat fonctionnel ; la livraison dépend de la validation du prochain run.
