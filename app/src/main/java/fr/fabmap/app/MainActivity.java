@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.WindowInsets;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -103,6 +106,32 @@ public class MainActivity extends Activity {
         TextView t=new TextView(this);t.setText(s);t.setTextSize(size);t.setTextColor(ink);
         t.setPadding(dp(14),dp(12),dp(14),dp(12));if(bold)t.setTypeface(null,1);return t;
     }
+    /** A light glass medallion rather than an opaque square behind the PNG icon. */
+    private View iconBadge(String icon,int size,String title){
+        ImageView image=iconAssets.view(icon,size-12);
+        if(image==null)return null;
+        FrameLayout frame=new FrameLayout(this);
+        GradientDrawable glass=new GradientDrawable();
+        glass.setShape(GradientDrawable.OVAL);
+        glass.setColor(0x40FFFFFF);
+        glass.setStroke(dp(1),0x99FFFFFF);
+        frame.setBackground(glass);
+        frame.setElevation(dp(2));
+        frame.setLayoutParams(new LinearLayout.LayoutParams(dp(size),dp(size)));
+        frame.addView(image,new FrameLayout.LayoutParams(dp(size-12),dp(size-12),Gravity.CENTER));
+        frame.setContentDescription("Icône de "+title);
+        return frame;
+    }
+    /** Restrained two-tone ink with a soft shadow, no opaque label bar. */
+    private void styleBubbleTitle(TextView title){
+        title.setBackground(null);
+        title.setTextColor(0xff163A5B);
+        title.getPaint().setShader(new LinearGradient(
+            0,0,dp(190),0,0xff173A5A,0xff286487,Shader.TileMode.CLAMP));
+        title.setShadowLayer(dp(1),0,dp(1),0x62000000);
+        title.setPadding(dp(3),dp(7),dp(3),dp(7));
+        title.setMinHeight(dp(48));
+    }
     private void button(LinearLayout box,String name,Runnable r){
         button(box,name,r,false);
     }
@@ -189,8 +218,8 @@ public class MainActivity extends Activity {
         TextView breadcrumb=label(crumbs.toString(),13,false);add(screen,breadcrumb);
         ScrollView scroll=new ScrollView(this);screen.addView(scroll,new LinearLayout.LayoutParams(-1,0,1));
         LinearLayout body=column();scroll.addView(body);
-        ImageView iconView=iconAssets.view(n.optString("icon",""),86);
-        if(iconView!=null){iconView.setContentDescription("Icône de "+n.optString("title","Bulle"));add(body,iconView);}
+        View iconView=iconBadge(n.optString("icon",""),94,n.optString("title","Bulle"));
+        if(iconView!=null)add(body,iconView);
         add(body,label(n.optString("title","Bulle"),27,true));
         button(body,"🫧 Explorer la Vallée des bulles (2D)",()->{valley=true;show();});
         String desc=n.optString("description","");if(!desc.isEmpty()){add(body,label(desc,19,false));button(body,"🔊 Écouter",()->say(desc));}
@@ -214,18 +243,12 @@ public class MainActivity extends Activity {
                 LinearLayout tile=column();tile.setGravity(Gravity.CENTER);
                 tile.setPadding(dp(7),dp(9),dp(7),dp(9));
                 tile.setBackground(bg((j%4==0)?blue:(j%4==1?0xffe0f4e8:(j%4==2?0xfff6e6ff:0xffffefd8)),false));
-                tile.setElevation(dp(5));
-                ImageView pictogram=iconAssets.view(child.optString("icon",""),66);
-                if(pictogram!=null){
-                    pictogram.setContentDescription("Icône de "+child.optString("title","Bulle"));
-                    tile.addView(pictogram);
-                }
+                tile.setElevation(dp(2));
+                View pictogram=iconBadge(child.optString("icon",""),80,child.optString("title","Bulle"));
+                if(pictogram!=null)tile.addView(pictogram);
                 TextView title=label(child.optString("title","Bulle"),19,true);
                 title.setGravity(Gravity.CENTER);
-                title.setTextColor(Color.WHITE);
-                title.setBackground(bg(0xff1B3657,false));
-                title.setShadowLayer(dp(2),dp(1),dp(2),0xff000000);
-                title.setMinHeight(dp(65));
+                styleBubbleTitle(title);
                 LinearLayout.LayoutParams titleParams=new LinearLayout.LayoutParams(-1,-2);
                 titleParams.topMargin=dp(8);tile.addView(title,titleParams);
                 LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(0,-2,1);
@@ -447,8 +470,8 @@ public class MainActivity extends Activity {
     private void exportTo(Uri uri)throws IOException{
         try(ZipOutputStream zip=new ZipOutputStream(getContentResolver().openOutputStream(uri))){
             zip.putNextEntry(new ZipEntry("map.json"));zip.write(data.toString().getBytes(StandardCharsets.UTF_8));zip.closeEntry();
-            // Photos and personalized icons share media/ with distinct UUID .jpg names.
-            File[] images=mediaDir.listFiles();if(images!=null)for(File f:images)if(f.isFile()&&f.getName().matches("[a-zA-Z0-9_-]+\\.jpg")){
+            // Photographs use JPEG; user icons may be transparent PNG or legacy JPEG.
+            File[] images=mediaDir.listFiles();if(images!=null)for(File f:images)if(f.isFile()&&f.getName().matches("[a-zA-Z0-9_-]+\\.(jpg|png)")){
                 zip.putNextEntry(new ZipEntry("media/"+f.getName()));
                 try(FileInputStream in=new FileInputStream(f)){byte[] buf=new byte[8192];int n;while((n=in.read(buf))!=-1)zip.write(buf,0,n);}
                 zip.closeEntry();
@@ -467,7 +490,7 @@ public class MainActivity extends Activity {
                 if(total>100_000_000)throw new IOException("Archive trop volumineuse");
                 if(name.equals("map.json"))try{incoming=new JSONObject(new String(content,StandardCharsets.UTF_8));}
                     catch(Exception ex){throw new IOException("Données non reconnues");}
-                else if(name.matches("media/[a-zA-Z0-9_-]+\\.jpg")){
+                else if(name.matches("media/[a-zA-Z0-9_-]+\\.(jpg|png)")){
                     try(FileOutputStream out=new FileOutputStream(new File(stage,name.substring(6)))){out.write(content);}
                 }else throw new IOException("Fichier inattendu dans l'archive");
                 zip.closeEntry();

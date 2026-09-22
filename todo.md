@@ -98,3 +98,10 @@ Run 35662052714 : échec SDK manager absent du PATH. Localisation explicite du b
 - [x] https://github.com/greenpower2669/FabMap/actions/runs/35769861235 : build #9 réussi et APK publiée en GitHub Release.
 - [x] https://github.com/greenpower2669/FabMap/releases/tag/v0.5.1-b9 ; https://github.com/greenpower2669/FabMap/releases/download/v0.5.1-b9/FabMap-v0.5.1-b9-debug.apk (743747 octets).
 - [ ] Sur téléphone : confirmer le retrait du bouton TV, tester les branches HDMI3 / écran noir, appui long, titres lisibles et mémoire TV déjà personnalisée ; exporter la mémoire complète AVANT toute désinstallation de l'APK debug précédente.
+
+## 0.5.2 — direction artistique et alpha (nouvelle décision)
+- [x] Remplacer le bloc bleu nuit par titre sobre bi-teinte avec ombre, séparé de l'icône, en guidé et Vallée ; garder appui long B.
+- [x] Supports circulaires translucides et coins transparents des sprites PNG dérivés, sans altérer les planches PNG masters.
+- [x] Import d'icône personnalisée en PNG alpha 256px, sans aplat blanc ; maintenir lecture des JPEG précédents.
+- [x] Sauvegarde/restauration complète et export/import de branche prennent PNG+JPEG avec remappage conservant l'extension ; pas de Base64.
+- [ ] Vérifier CI build/Release 0.5.2 et consigner preuves ; test réel sur appareil : contraste, transparence icône et rendu aux différents zooms ; import PNG transparent puis export d'une branche/restauration complète et retour de vieux ZIP JPEG ; sauvegarder avant désinstallation debug.

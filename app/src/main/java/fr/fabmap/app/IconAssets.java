@@ -15,7 +15,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/** Lightweight identifiers: built:01-00 or custom:UUID.jpg. No Base64 in JSON. */
+/** Lightweight identifiers: built:01-00, custom:UUID.png or legacy custom:UUID.jpg. */
 final class IconAssets {
     static final String[][] GROUPS={
         {"Thèmes","Maison","Grande pièce","Télévision","Télécommande","Cuisine","Santé","Famille","Musique"},
@@ -36,7 +36,7 @@ final class IconAssets {
         @Override protected int sizeOf(String key,Bitmap value){return value.getByteCount();}
     };
     IconAssets(Context context,File media){this.context=context;this.media=media;}
-    static boolean customFile(String value){return value!=null&&value.matches("custom:[a-zA-Z0-9_-]+\\.jpg");}
+    static boolean customFile(String value){return value!=null&&value.matches("custom:[a-zA-Z0-9_-]+\\.(png|jpg)");}
     static boolean builtFile(String value){return value!=null&&value.matches("built:0[1-7]-0[0-7]");}
     private static String file(String icon){return icon.substring(7);}
     Bitmap get(String icon){
@@ -112,7 +112,7 @@ final class IconAssets {
         return true;
     }
     private static void put(JSONObject obj,String name,Object value){try{obj.put(name,value);}catch(Exception ex){throw new IllegalStateException(ex);}}
-    /** Decode bounded, flatten transparency on white, and store only a small JPEG. */
+    /** Import bounded bitmap; preserve source alpha in a compact 256px PNG. Legacy JPEG remains readable. */
     static String importCustom(InputStream input,File media)throws IOException{
         if(input==null)throw new IOException("Image inaccessible");
         ByteArrayOutputStream out=new ByteArrayOutputStream();
@@ -132,16 +132,16 @@ final class IconAssets {
         Bitmap initial=BitmapFactory.decodeByteArray(bytes,0,bytes.length,sample);
         if(initial==null)throw new IOException("Impossible de lire cette image");
         Bitmap square=Bitmap.createBitmap(256,256,Bitmap.Config.ARGB_8888);
-        Canvas canvas=new Canvas(square);canvas.drawColor(Color.WHITE);
+        Canvas canvas=new Canvas(square); // Fresh ARGB_8888 bitmap is fully transparent.
         float factor=Math.min(256f/initial.getWidth(),256f/initial.getHeight());
         float w=initial.getWidth()*factor,h=initial.getHeight()*factor;
         android.graphics.Paint paint=new android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG|android.graphics.Paint.FILTER_BITMAP_FLAG);
         canvas.drawBitmap(initial,null,new android.graphics.RectF((256-w)/2,(256-h)/2,(256+w)/2,(256+h)/2),paint);
         initial.recycle();
-        String name=UUID.randomUUID()+".jpg";
+        String name=UUID.randomUUID()+".png";
         File target=new File(media,name),temporary=new File(media,name+".tmp");
         try(FileOutputStream file=new FileOutputStream(temporary)){
-            if(!square.compress(Bitmap.CompressFormat.JPEG,86,file))throw new IOException("Encodage JPEG impossible");
+            if(!square.compress(Bitmap.CompressFormat.PNG,100,file))throw new IOException("Encodage PNG impossible");
             file.getFD().sync();
         }catch(Exception ex){temporary.delete();throw new IOException("Enregistrement icône impossible",ex);}
         finally{square.recycle();}

@@ -39,6 +39,17 @@ public final class ExtractIconBoards {
                 Graphics2D g=small.createGraphics();
                 g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
                 g.drawImage(image,0,0,144,144,x,y,x+crop,y+crop,null);g.dispose();
+                // The reference board is opaque. Extract a soft-edged transparent medallion:
+                // never ship the rectangular board background around each pictogram.
+                final double center=71.5, radius=68.0, feather=3.0;
+                for(int sy=0;sy<144;sy++)for(int sx=0;sx<144;sx++){
+                    int argb=small.getRGB(sx,sy);
+                    double dist=Math.hypot(sx-center,sy-center);
+                    double factor=Math.max(0,Math.min(1,(radius-dist)/feather));
+                    int alpha=(int)Math.round(((argb>>>24)&255)*factor);
+                    small.setRGB(sx,sy,(alpha<<24)|(argb&0x00ffffff));
+                }
+                if((small.getRGB(0,0)>>>24)!=0)throw new Exception("Sprite corner not transparent");
                 File output=new File(target,board[1]+"-"+String.format("%02d",i)+".png");
                 if(!ImageIO.write(small,"png",output))throw new Exception("PNG encoder unavailable");
                 done++;

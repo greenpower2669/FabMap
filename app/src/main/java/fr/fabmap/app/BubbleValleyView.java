@@ -5,6 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.HapticFeedbackConstants;
@@ -178,11 +180,22 @@ final class BubbleValleyView extends View {
             paint.setColor(b.color);c.drawCircle(x,y,r,paint);
             if(scale<.43f)continue;
             Bitmap itemIcon=iconAssets.get(b.icon);
-            if(itemIcon!=null){float side=r*.86f;
+            if(itemIcon!=null){
+                float centerY=y-r*.43f,side=r*.80f;
+                // Transparent glass backing, not a white image rectangle.
+                paint.setStyle(Paint.Style.FILL);
+                paint.setColor(0x42FFFFFF);
+                c.drawCircle(x,centerY,r*.49f,paint);
+                paint.setStyle(Paint.Style.STROKE);
+                paint.setStrokeWidth(density*1.1f);
+                paint.setColor(0x88FFFFFF);
+                c.drawCircle(x,centerY,r*.49f,paint);
+                paint.setStyle(Paint.Style.FILL);
                 paint.setColor(Color.WHITE);
-                c.drawBitmap(itemIcon,null,new android.graphics.RectF(x-side/2f,y-r*.80f,x+side/2f,y-r*.80f+side),paint);
+                c.drawBitmap(itemIcon,null,new android.graphics.RectF(
+                    x-side/2f,centerY-side/2f,x+side/2f,centerY+side/2f),paint);
             }
-            // Title is a separate high-contrast badge, never printed on the icon.
+            // Subtle two-tone lettering + soft shadow; never an opaque banner.
             paint.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
             paint.setTextSize(density*Math.max(11,Math.min(19,16*scale)));
             paint.setTextAlign(Paint.Align.CENTER);
@@ -196,21 +209,18 @@ final class BubbleValleyView extends View {
             }
             String a=truncate(first.toString(),r*1.65f);
             String d=truncate(second.toString(),r*1.65f);
-            float badgeTop=y+r*.16f,badgeBottom=y+r*.94f;
-            paint.setColor(0xff142E4C);
-            paint.setStyle(Paint.Style.FILL);
-            paint.setShadowLayer(density*4,0,density*2,0xaa000000);
-            c.drawRoundRect(x-r*.94f,badgeTop,x+r*.94f,badgeBottom,density*9,density*9,paint);
-            paint.clearShadowLayer();
-            paint.setColor(Color.WHITE);
-            paint.setShadowLayer(density*2,0,density,0xdd000000);
+            paint.setShader(new LinearGradient(x-r*.88f,0,x+r*.88f,0,
+                0xffFFFFFF,0xffC3E8F8,Shader.TileMode.CLAMP));
+            paint.setShadowLayer(density*2.6f,0,density*1.3f,0xd010293e);
             if(d.isEmpty()){
-                c.drawText(a,x,y+r*.66f,paint);
+                c.drawText(a,x,itemIcon==null?y+r*.18f:y+r*.50f,paint);
             }else{
-                c.drawText(a,x,y+r*.48f,paint);
-                c.drawText(d,x,y+r*.75f,paint);
+                float firstY=itemIcon==null?y-r*.03f:y+r*.32f;
+                c.drawText(a,x,firstY,paint);
+                c.drawText(d,x,firstY+r*.28f,paint);
             }
             paint.clearShadowLayer();
+            paint.setShader(null);
         }
         if(limitReached){
             paint.setColor(0xff234568);paint.setTextAlign(Paint.Align.LEFT);

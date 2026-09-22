@@ -87,3 +87,6 @@ Run #8 a produit une APK de test contenant les petites icônes des trois planche
 
 ### Livraison corrigée 0.5.1
 Run #9 : compilation et GitHub Release v0.5.1-b9 vérifiées ; tests visuels et du parcours TV sur téléphone restent à effectuer. Pas de changement de l'interprétation : TV = parcours intégré, pas module à installer.
+
+## 0.5.2 — RÈGLE ARTISTIQUE PRIORITAIRE demandée par Fab
+La 0.5.1 est trop lourde : **supprimer les bandeaux opaques** derrière les titres, conserver la séparation icône/texte et la lisibilité. Typographie sobre **bi-teinte** (encre bleu foncé→bleu doux sur fond clair en guidé ; blanc→bleu très clair sur les bulles foncées de la Vallée), ombre portée légère. Les icônes doivent disposer d'un **support rond translucide**, ni rectangle blanc, ni gros carré opaque ; il faut préserver l'alpha des PNG, y compris lorsque l'utilisateur importe lui-même une nouvelle icône. Les textes restent obligatoires, le grossissement/voix B inchangé. Aucune retouche des masters de planches par écrasement : les découpes dérivées seulement reçoivent un masque alpha à bord doux. Anciennes icônes utilisateur JPEG encore lisibles ; les nouvelles sont PNG 256px transparentes. Export et import complet + branche doivent accepter `media/*.png` et `media/*.jpg`, préserver l'extension lors du remappage, et ne rien convertir en Base64.

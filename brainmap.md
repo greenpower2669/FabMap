@@ -87,3 +87,9 @@ Run 35764510346 sur 0927b28c36e2833f253c7bd8b51bdfbf4921504b : extracteur 24 pet
 
 ### Preuve CI 0.5.1
 Run 35769861235 du commit a39c9a308b198e75805fe3fa189d1022602e9697 : sprites générés, assembleDebug et publication directe réussis ; pré-release v0.5.1-b9 avec APK 743747 octets. Aucun test tactile ni migration instrumentée démontré par CI.
+
+## 0.5.2 — Chaîne de transparence et stylisation
+- `tools/ExtractIconBoards.java` : masque circulaire à alpha progressif appliqué aux *sprites 144px uniquement* après découpe des planches maîtresses opaques ; les quatre coins deviennent transparents. Les masters restent intacts sous assets/icons/boards ; l'alpha est conservé dans les sprites PNG embarqués.
+- `IconAssets.importCustom()` : bitmap ARGB_8888 vierge transparent, mise à l'échelle dans 256px et compression PNG ; références `custom:UUID.png`. `custom:UUID.jpg` d'archives et d'installations antérieures reste reconnu/affiché.
+- `MainActivity.show()` : iconBadge ronde semi-transparente et titre indépendant à Shader LinearGradient bicolore bleu + ombre légère sans cartouche plein ; titre/interactions de la tuile et lecture B préservés. `BubbleValleyView.onDraw()` : verre rond translucide derrière l'icône, titre clair bi-teinte avec ombre mais sans fond opaque ; paints restaurés après dessin.
+- `BubblePacks.java` : paquets de branches acceptent `media/*.png` et `media/*.jpg`, remappent les images référencées en conservant l'extension ; la sauvegarde complète et sa restauration acceptent ces deux formats. JSON anciens et vieux JPEG compatibles.

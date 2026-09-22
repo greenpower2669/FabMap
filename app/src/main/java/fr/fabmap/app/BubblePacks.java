@@ -37,6 +37,12 @@ final class BubblePacks {
     private static boolean photoName(String name){
         return name.matches("[a-zA-Z0-9_-]+\\.jpg");
     }
+    private static boolean mediaName(String name){
+        return name.matches("[a-zA-Z0-9_-]+\\.(jpg|png)");
+    }
+    private static String freshName(String old){
+        return UUID.randomUUID()+old.substring(old.lastIndexOf('.'));
+    }
     private static void streamFile(File file,ZipOutputStream zip,long[] size)throws IOException{
         try(InputStream in=new FileInputStream(file)){
             byte[] buf=new byte[8192];int n;long local=0;
@@ -109,7 +115,7 @@ final class BubblePacks {
                     if(name.equals("bubble.json")){
                         byte[] bytes=read(zip,MAX_META);total+=bytes.length;
                         packageInfo=parse(bytes);
-                    }else if(name.matches("media/[a-zA-Z0-9_-]+\\.jpg")){
+                    }else if(name.matches("media/[a-zA-Z0-9_-]+\\.(jpg|png)")){
                         byte[] bytes=read(zip,MAX_PHOTO);total+=bytes.length;
                         try(OutputStream out=new FileOutputStream(new File(staged,name.substring(6)))){
                             out.write(bytes);
@@ -150,15 +156,15 @@ final class BubblePacks {
                 if(!oldPhoto.isEmpty()){
                     if(!photoName(oldPhoto)||!new File(staged,oldPhoto).isFile())
                         throw new IOException("Photo absente : "+oldPhoto);
-                    if(!photoMap.containsKey(oldPhoto))photoMap.put(oldPhoto,UUID.randomUUID()+".jpg");
+                    if(!photoMap.containsKey(oldPhoto))photoMap.put(oldPhoto,freshName(oldPhoto));
                     put(copy,"photo",photoMap.get(oldPhoto));
                 }
                 String originalIcon=sourceNode.optString("icon","");
                 if(IconAssets.customFile(originalIcon)){
                     String oldIconName=originalIcon.substring(7);
-                    if(!new File(staged,oldIconName).isFile())
+                    if(!mediaName(oldIconName)||!new File(staged,oldIconName).isFile())
                         throw new IOException("Icône personnelle absente : "+oldIconName);
-                    if(!photoMap.containsKey(oldIconName))photoMap.put(oldIconName,UUID.randomUUID()+".jpg");
+                    if(!photoMap.containsKey(oldIconName))photoMap.put(oldIconName,freshName(oldIconName));
                     put(copy,"icon","custom:"+photoMap.get(oldIconName));
                 }
                 put(updated,idMap.get(oldId),copy);
