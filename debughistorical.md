@@ -32,3 +32,9 @@
 ## Run #4 — livraison vérifiée
 - Run 35665143325 du commit b43bf546ffecdfd9e991ba7673af0fde4cb9b7c6 : SDK, Gradle, compilation et publication directe réussis.
 - Pré-release v0.2.0-b4, APK 33011 octets publiée. Aucune preuve de test réel de fichiers .fabmap ou du comportement Android, à effectuer sur téléphone.
+
+## Itération 0.3.0 — comportement non destructif des appuis longs
+- Risque : un appui long sur « C'EST FAIT ! » pourrait valider une étape par erreur. Le listener de long click renvoie true, la confirmation reste uniquement dans OnClick.
+- Risque : prévisualisation modifiant la pile de navigation ; showPreview est une fenêtre modale, sans zoom ni changement de path ou step.
+- Une fenêtre de lecture reste affichée après le relâchement, et le bouton « Réécouter » ne la ferme pas ; la fermeture arrête la synthèse.
+- CI et vrai test téléphone à vérifier après commit ; ne pas annoncer l'APK avant preuve de Release.

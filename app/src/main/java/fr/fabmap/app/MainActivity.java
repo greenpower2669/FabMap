@@ -104,9 +104,51 @@ public class MainActivity extends Activity {
         t.setPadding(dp(14),dp(12),dp(14),dp(12));if(bold)t.setTypeface(null,1);return t;
     }
     private void button(LinearLayout box,String name,Runnable r){
-        TextView t=label(name,19,true);t.setBackground(bg(blue,false));
-        LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-1,-2);lp.setMargins(dp(3),dp(5),dp(3),dp(5));
-        box.addView(t,lp);t.setOnClickListener(v->r.run());
+        button(box,name,r,false);
+    }
+    private void button(LinearLayout box,String name,Runnable r,boolean confirmation){
+        TextView t=label(name,confirmation?26:19,true);
+        t.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL);
+        t.setMinHeight(dp(confirmation?110:64));
+        t.setBackground(bg(confirmation?Color.rgb(24,113,56):blue,false));
+        if(confirmation)t.setTextColor(Color.WHITE);
+        LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-1,-2);
+        lp.setMargins(dp(3),dp(6),dp(3),dp(6));box.addView(t,lp);
+        t.setOnClickListener(v->r.run());
+        previewOnLongPress(t,name,confirmation?"Valide cette étape et passe à la suivante. Appuie brièvement pour confirmer.":"Appuie brièvement pour activer ce bouton.");
+    }
+    private void previewOnLongPress(View target,String title,String description){
+        target.setOnLongClickListener(v->{
+            v.performHapticFeedback(android.view.HapticFeedbackConstants.LONG_PRESS);
+            showPreview(title,description);
+            return true; // Consumed: no click, no navigation, no validation.
+        });
+    }
+    private void showPreview(String title,String description){
+        LinearLayout content=column();
+        content.setPadding(dp(14),dp(14),dp(14),dp(14));
+        TextView heading=label(title,32,true);
+        heading.setGravity(Gravity.CENTER);
+        content.addView(heading);
+        if(description!=null&&!description.trim().isEmpty()){
+            TextView detail=label(description,24,false);
+            detail.setGravity(Gravity.CENTER);
+            content.addView(detail);
+        }
+        ScrollView scroll=new ScrollView(this);
+        scroll.addView(content);
+        AlertDialog dialog=new AlertDialog.Builder(this)
+            .setView(scroll)
+            .setPositiveButton("Fermer",(d,w)->{})
+            .setNeutralButton("🔊 Réécouter",null)
+            .create();
+        dialog.setOnDismissListener(d->{if(voice!=null)voice.stop();});
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(v->
+            say(title+(description==null||description.isEmpty()?"":". "+description)));
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextSize(20);
+        dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextSize(20);
+        say(title+(description==null||description.isEmpty()?"":". "+description));
     }
     private void zoom(String id){
         if(obj(id)==null)return;path.add(id);expanded=false;step=0;show();
@@ -139,6 +181,9 @@ public class MainActivity extends Activity {
         TextView up=label("‹ Retour",18,true);nav.addView(up);up.setOnClickListener(v->back());
         TextView home=label("⌂ Accueil",18,true);nav.addView(home);home.setOnClickListener(v->{path.clear();path.add("home");expanded=false;step=0;show();});
         add(screen,nav);
+        if(path.size()==1){
+            add(screen,label("Touchez une bulle pour entrer. Maintenez le doigt pour agrandir et écouter.",15,false));
+        }
         StringBuilder crumbs=new StringBuilder();for(String id:path){if(crumbs.length()>0)crumbs.append(" › ");crumbs.append(obj(id).optString("title"));}
         TextView breadcrumb=label(crumbs.toString(),13,false);add(screen,breadcrumb);
         ScrollView scroll=new ScrollView(this);screen.addView(scroll,new LinearLayout.LayoutParams(-1,0,1));
@@ -154,8 +199,8 @@ public class MainActivity extends Activity {
             add(body,label(instruction,23,true));
             button(body,"🔊 Lire cette étape",()->say(instruction));
             if(i>0)button(body,"‹ Étape précédente",()->{step--;show();});
-            if(i<steps.length()-1)button(body,"C'est fait →",()->{step++;show();});
-            else button(body,"Recommencer",()->{step=0;show();});
+            if(i<steps.length()-1)button(body,"✓ C'EST FAIT !",()->{step++;show();},true);
+            else button(body,"✓ C'EST FAIT ! — Recommencer",()->{step=0;show();},true);
         }
         JSONArray children=n.optJSONArray("children");int count=children==null?0:children.length();
         if(count>0){add(body,label("Explorer les bulles",21,true));for(int start=0;start<Math.min(count,expanded?count:4);start+=2){
@@ -166,6 +211,7 @@ public class MainActivity extends Activity {
                 bubble.setBackground(bg((j%4==0)?blue:(j%4==1?0xffe0f4e8:(j%4==2?0xfff6e6ff:0xffffefd8)),true));
                 LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(0,dp(140),1);lp.setMargins(dp(5),dp(6),dp(5),dp(6));row.addView(bubble,lp);
                 bubble.setOnClickListener(v->zoom(id));
+                previewOnLongPress(bubble,child.optString("title"),child.optString("description"));
             }
         }}
         if(count>4)button(body,expanded?"Voir moins":"Voir les autres bulles",()->{expanded=!expanded;show();});

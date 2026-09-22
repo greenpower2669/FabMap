@@ -38,3 +38,10 @@ Le run #3 du commit b6e849c5aba3bd20322a538203deb6ff91632363 a compilé :app:ass
 
 ## CI 0.2.0
 Le run 35665143325 compile le nouveau `BubblePacks.java` avec MainActivity et publie la pré-release v0.2.0-b4 ; la compilation ne constitue pas un test d'import/export réel sur appareil.
+
+## 0.3.0 — affordances voix et grossissement
+- MainActivity.button(...) assure désormais une cible >=64dp, ou >=110dp et verte pour « C'EST FAIT ! ». Tap exécute la callback d'origine ; long press consumé par OnLongClickListener.
+- MainActivity.previewOnLongPress(...) déclenche retour haptique Android puis showPreview(...). Celui-ci crée un AlertDialog à contenu ScrollView, titre 32sp et explication 24sp centrés ; fermeture explicite, écoute auto et bouton Réécouter ; fermer stoppe TTS.
+- Les bulles ont leur OnClick zoom d'origine ET leur appui long consultatif, sans mutation de path, step, edit ni données.
+- La section des étapes appelle button(..., true) pour la validation verte. Les autres boutons passent tous par button(...) pour harmoniser l'appui long.
+- Limites de validation : comportement TalkBack et ergonomie petit écran à essayer en main réelle ; aucun test instrumenté d'accessibilité encore.

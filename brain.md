@@ -29,3 +29,10 @@ Sans setup-android, sdkmanager n'est pas dans le PATH. Trouver le binaire via le
 
 ## Itération 0.2.0 — export/import de bulles (demande vocale à confirmer)
 Interprétation de « sauvegarde ou DL de probables » : sauvegarder/télécharger des bulles **et procédures** individuellement, en complément du ZIP de mémoire complète. Chaque paquet englobe tous ses descendants accessibles, étapes et photos ; import sous la bulle choisie **sans remplacer** la mémoire. Pas de réseau ni d'accès familial. Confirmation de la formulation à demander à Fab sans empêcher la réalisation de ce besoin compatible avec le concept.
+
+## 0.3.0 — décision de Fab après maquette
+- Appui court = action habituelle (bulle : zoom ; bouton : fonction).
+- Appui long **B** = aperçu texte grand, centré, lecture vocale automatique, qui reste après relâchement ; fermeture explicite, bouton Réécouter ; aucune action normale déclenchée par appui long.
+- Toutes les bulles et les boutons interactifs, y compris le bouton de validation, sont concernés.
+- Bouton « C'EST FAIT ! » vert, plus grand, texte clair et grande cible tactile ; sa lecture explique la validation mais ne l'effectue pas.
+- Aucun code de connexion entre personnes ; ne pas modifier la sauvegarde/import au cours de ce changement.

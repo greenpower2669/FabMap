@@ -38,3 +38,9 @@ Run 35662052714 : échec SDK manager absent du PATH. Localisation explicite du b
 - Pré-release : https://github.com/greenpower2669/FabMap/releases/tag/v0.2.0-b4
 - APK direct : https://github.com/greenpower2669/FabMap/releases/download/v0.2.0-b4/FabMap-v0.2.0-b4-debug.apk (33 011 octets d'après GitHub).
 - Tests sur appareil non effectués. Vérifier export/import, photo, cycles et espace insuffisant. Avant toute désinstallation de v0.1.0, EXPORTER LA MÉMOIRE ENTIÈRE : signature debug éphémère.
+
+## Itération 0.3.0 — à vérifier
+- Développé : bouton vert « C'EST FAIT ! » de 110dp, long press consultatif sur bulles et boutons, aperçu persistant centré, lecture automatique, Réécouter, Fermer.
+- Après commit : vérifier compilation, pré-release et lien direct d'APK sans Artifacts ; consigner commit et run vérifiés.
+- Test smartphone : appui long n'exécute pas OnClick et ne change pas l'étape ; fermeture sans zoom ; écran petit/fontScale 200 %, TalkBack et TTS interrompue à fermeture.
+- Avant toute désinstallation de l'ancienne build debug, export de la mémoire complète indispensable.

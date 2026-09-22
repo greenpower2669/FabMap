@@ -18,3 +18,6 @@ Documents FAB Copilot : [brain.md](brain.md), [brainmap.md](brainmap.md), [debug
 Une sauvegarde complète existe toujours : **Sauvegarder ma mémoire** puis **Restaurer une sauvegarde** (attention, cette restauration remplace la mémoire actuelle).
 En plus, **Télécharger cette bulle et ses filles** crée un paquet local .fabmap depuis la bulle affichée, y compris descendants, étapes et photos référencées. **Importer des bulles ici** rattache le paquet à la bulle courante sans écraser les existantes. Identifiants et médias sont remappés à l'import, une sous-bulle partagée est exportée une seule fois. Hors ligne ; aucun compte ni connexion entre personnes.
 Le sélecteur Android permet de choisir Téléchargements, stockage local ou un fournisseur de documents éventuellement configuré sur le téléphone. Il n'y a pas de téléchargement automatique depuis un serveur.
+
+## FabMap 0.3.0 : lecture par appui long
+Toucher brièvement une bulle pour zoomer, maintenir pour ouvrir un aperçu centré en gros caractères avec lecture vocale automatique ; relâcher ne ferme pas la fenêtre. « Réécouter » et « Fermer » sont explicites. Les boutons ont le même comportement : maintenir ne déclenche jamais leur action. « C'EST FAIT ! » est vert et agrandi. Sur téléphone, tester le comportement avec TalkBack et les tailles de police Android.

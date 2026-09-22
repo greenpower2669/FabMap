@@ -50,12 +50,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          tag="v0.2.0-b$GITHUB_RUN_NUMBER"
-          name="FabMap-v0.2.0-b$GITHUB_RUN_NUMBER-debug.apk"
+          tag="v0.3.0-b$GITHUB_RUN_NUMBER"
+          name="FabMap-v0.3.0-b$GITHUB_RUN_NUMBER-debug.apk"
           cp app/build/outputs/apk/debug/app-debug.apk "$name"
           gh release create "$tag" "$name" \
             --target "$GITHUB_SHA" \
-            --title "FabMap v0.2.0 build $GITHUB_RUN_NUMBER (test)" \
+            --title "FabMap v0.3.0 build $GITHUB_RUN_NUMBER (test)" \
             --notes "APK de test avec signature debug temporaire : avant désinstallation sauvegarder les données." \
             --prerelease
           echo "APK DIRECT : https://github.com/$GITHUB_REPOSITORY/releases/download/$tag/$name"
