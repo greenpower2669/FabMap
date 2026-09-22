@@ -82,3 +82,6 @@ https://github.com/greenpower2669/FabMap/actions/runs/35769861235 : compilation 
 
 ## 0.5.2 — correction de la régression de direction artistique (Fab)
 Fab juge le bandeau 0.5.1 massif ; demande une typographie plus discrète, bi-teinte et ombrée, et des icônes incrustées sur fond transparent/translucide. Réparation ciblée : retirer le cartouche opaque tout en gardant séparation texte/visuel, lisibilité et TTS. Défaut technique 0.5.0 : l'extraction source laissait le fond carré de la planche ; `importCustom` aplatissait l'alpha sur blanc et enregistrait en JPEG. Corriger la découpe dérivée par masque alpha et les prochaines icônes perso via PNG sans toucher aux sources ni convertir de vieux JPEG. Risques à valider sur smartphone : contraste bicolore selon branche, masquage éventuel des bords des icônes générées, PNG alpha import/export et anciennes archives JPEG. Build 0.5.2 en attente de CI au moment du commit.
+
+### Run #10 — correction bâtie, essai humain encore nécessaire
+https://github.com/greenpower2669/FabMap/actions/runs/35783702585 : extraction des 24 sprites, javac/Gradle et Release réussis. v0.5.2-b10, 811831 octets. Aucun test humain de l'alpha, des ombres sur téléphone, ni des ZIP PNG/JPEG ; sauvegarde complète avant remplacement de signature debug.

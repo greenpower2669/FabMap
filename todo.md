@@ -105,3 +105,8 @@ Run 35662052714 : échec SDK manager absent du PATH. Localisation explicite du b
 - [x] Import d'icône personnalisée en PNG alpha 256px, sans aplat blanc ; maintenir lecture des JPEG précédents.
 - [x] Sauvegarde/restauration complète et export/import de branche prennent PNG+JPEG avec remappage conservant l'extension ; pas de Base64.
 - [ ] Vérifier CI build/Release 0.5.2 et consigner preuves ; test réel sur appareil : contraste, transparence icône et rendu aux différents zooms ; import PNG transparent puis export d'une branche/restauration complète et retour de vieux ZIP JPEG ; sauvegarder avant désinstallation debug.
+
+### Validation technique v0.5.2-b10
+- [x] Run #10 https://github.com/greenpower2669/FabMap/actions/runs/35783702585 : build success, 24 sprites PNG générés et APK publiée directement en GitHub Release.
+- [x] https://github.com/greenpower2669/FabMap/releases/tag/v0.5.2-b10 ; APK direct https://github.com/greenpower2669/FabMap/releases/download/v0.5.2-b10/FabMap-v0.5.2-b10-debug.apk (811831 octets).
+- [ ] Fab : tester rendu bi-teinte/ombres et incrustation transparente sur téléphone et l'aller-retour PNG/JPEG sauvegarde et import de branche ; exporter mémoire complète avant désinstallation.

@@ -93,3 +93,6 @@ Run 35769861235 du commit a39c9a308b198e75805fe3fa189d1022602e9697 : sprites gé
 - `IconAssets.importCustom()` : bitmap ARGB_8888 vierge transparent, mise à l'échelle dans 256px et compression PNG ; références `custom:UUID.png`. `custom:UUID.jpg` d'archives et d'installations antérieures reste reconnu/affiché.
 - `MainActivity.show()` : iconBadge ronde semi-transparente et titre indépendant à Shader LinearGradient bicolore bleu + ombre légère sans cartouche plein ; titre/interactions de la tuile et lecture B préservés. `BubbleValleyView.onDraw()` : verre rond translucide derrière l'icône, titre clair bi-teinte avec ombre mais sans fond opaque ; paints restaurés après dessin.
 - `BubblePacks.java` : paquets de branches acceptent `media/*.png` et `media/*.jpg`, remappent les images référencées en conservant l'extension ; la sauvegarde complète et sa restauration acceptent ces deux formats. JSON anciens et vieux JPEG compatibles.
+
+### CI 0.5.2 vérifiée
+Run #10 35783702585 sur dfef1851b129887c5ed21f8f05c2da12f228a798 : extracteur de 24 PNG à coins transparents réussi, compilation assembleDebug et création de Release v0.5.2-b10 réussies (811831 octets). La CI n'effectue pas de test tactile ni d'export/import sur téléphone.
