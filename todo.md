@@ -93,3 +93,8 @@ Run 35662052714 : échec SDK manager absent du PATH. Localisation explicite du b
 - [x] Migration non destructive de la démonstration précédente lorsque contenu source inchangé ; réutiliser l'ancienne branche installée sans créer un doublon ; garder export complet et icônes personnalisées.
 - [x] Bandeaux contrastés + ombres séparant titres et images dans la Vallée et les tuiles du mode guidé.
 - [ ] Vérifier javac/Gradle, CI, Release et lien APK direct ; consigner preuves puis tester migration ancienne mémoire, présence d'un ancien `fabmap-tv-real`, TV personnalisée, contraste/zoom, appui long et sauvegarde sur téléphone.
+
+### Livraison 0.5.1 — preuves et test humain
+- [x] https://github.com/greenpower2669/FabMap/actions/runs/35769861235 : build #9 réussi et APK publiée en GitHub Release.
+- [x] https://github.com/greenpower2669/FabMap/releases/tag/v0.5.1-b9 ; https://github.com/greenpower2669/FabMap/releases/download/v0.5.1-b9/FabMap-v0.5.1-b9-debug.apk (743747 octets).
+- [ ] Sur téléphone : confirmer le retrait du bouton TV, tester les branches HDMI3 / écran noir, appui long, titres lisibles et mémoire TV déjà personnalisée ; exporter la mémoire complète AVANT toute désinstallation de l'APK debug précédente.

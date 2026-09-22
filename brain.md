@@ -84,3 +84,6 @@ Run #8 a produit une APK de test contenant les petites icônes des trois planche
 - Ordre : allumer avec ON/OFF de la télécommande ; **observer**, puis choisir uniquement la branche pertinente : si chaînes payantes/autres → rechercher HDMI3 ; si écran noir → reprendre la télécommande TV portant « TV » à côté du ON/OFF, appuyer, attendre l'affichage parfois long. Pas de SOURCE imaginé ni de délai chiffré.
 - Protéger les mémoires déjà créées : migration ciblée des libellés/étapes de la démonstration inchangée uniquement, sans écraser les contributions. Si la branche ajoutée précédemment existe, la réutiliser plutôt que créer une seconde « vraie TV ».
 - Visuel : le titre doit se **détacher réellement de l'icône** dans la Vallée et en navigation guidée : placement distinct, cartouche bleu nuit, typographie blanche et ombre ; pas de caractères posés directement sur le pictogramme, ni dépendance à la couleur seule. Appui long vocal B conservé.
+
+### Livraison corrigée 0.5.1
+Run #9 : compilation et GitHub Release v0.5.1-b9 vérifiées ; tests visuels et du parcours TV sur téléphone restent à effectuer. Pas de changement de l'interprétation : TV = parcours intégré, pas module à installer.

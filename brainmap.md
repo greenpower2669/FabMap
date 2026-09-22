@@ -84,3 +84,6 @@ Run 35764510346 sur 0927b28c36e2833f253c7bd8b51bdfbf4921504b : extracteur 24 pet
 - `MainActivity.load()` appelle `TvDemo.refresh(nodes)` après lecture et dans le scénario vierge. Le bouton et la méthode `installTvProcedure()` sont supprimés ; les fonctions de sauvegarde et d'icônes ne sont pas modifiées.
 - `MainActivity.show()` : une tuile verticale par enfant : icône dédiée au-dessus, texte dans son propre bandeau bleu nuit à lettres blanches avec ombre et élévation ; click/long click sur toute la tuile, chemin préservé.
 - `BubbleValleyView.onDraw()` : image dans la partie supérieure, titre dessiné dans un cartouche arrondi sombre dans la partie basse avec ombre, séparé du pictogramme ; pas de nouveau bitmap géant ni nouvelle dépendance.
+
+### Preuve CI 0.5.1
+Run 35769861235 du commit a39c9a308b198e75805fe3fa189d1022602e9697 : sprites générés, assembleDebug et publication directe réussis ; pré-release v0.5.1-b9 avec APK 743747 octets. Aucun test tactile ni migration instrumentée démontré par CI.
