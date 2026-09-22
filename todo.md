@@ -49,3 +49,9 @@ Run 35662052714 : échec SDK manager absent du PATH. Localisation explicite du b
 - Run #5 : https://github.com/greenpower2669/FabMap/actions/runs/35694822501 — compilation et publication GitHub Release réussies.
 - Pré-release https://github.com/greenpower2669/FabMap/releases/tag/v0.3.0-b5 ; APK direct https://github.com/greenpower2669/FabMap/releases/download/v0.3.0-b5/FabMap-v0.3.0-b5-debug.apk (34 723 octets selon GitHub).
 - Aucun test Android réel du geste long effectué ; tests smartphone/TalkBack, sauvegarde avant désinstallation et compatibilité signature restent à vérifier.
+
+## 0.4.0 — Vallée des bulles
+- Développé : carte 2D à trame finie de bulles existantes, couleurs de branche, liens réels, drag/pinch, zoom +/- et recentrage, sélection vers fiche guidée, appui long vocal B, plafond 160 de rendu.
+- À vérifier après push : CI :app:assembleDebug, publication et URL APK directe, pas d'artefact Actions ; consigner résultats vérifiés dans les mémoires.
+- À tester sur téléphone : limite du déplacement sans vide infini, gros graphes, nœuds cycliques, liens partagés, gestes et appui long, retour guidé, grande police, TalkBack ; sauvegarder la mémoire avant toute désinstallation de la build debug.
+- Non réalisé : vrais embeddings/proximité sémantique d'IA, icônes spécifiques pour chaque thème, rendu 3D. Aucun code/asset massif dans l'APK.

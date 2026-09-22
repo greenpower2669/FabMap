@@ -42,3 +42,9 @@
 ## Run #5 — livraison 0.3.0 confirmée
 - Workflow 35694822501 : JDK, SDK, Gradle, assembleDebug et gh release create réussis ; APK direct de test v0.3.0-b5 (34723 octets).
 - Cela prouve la compilation et la publication, non le ressenti tactile, l'ergonomie ou la lecture effective sur téléphone.
+
+## 0.4.0 — risques, distinctions, vérifications requises
+- « La bulle engendre l'espace » signifie carte bornée par la présence d'éléments réels, pas physique 3D ni génération de mots. Le vide ne crée aucune bulle, pan contraint à la boîte des bulles.
+- La proximité visuelle vient des liens parent/enfant existants et de placements déterministes ; NE PAS la présenter comme une distance de tokens IA/embedding. Aucun modèle lourd ni appel réseau.
+- Cartes >160 : seule la représentation Vallée est tronquée, pas les données/fiche guidée ; vérifier les arcs et collisions sur graphes cycliques/partagés.
+- Tests non faits au moment de ce commit : build 0.4.0, drag et pinçage sur appareil, appui long B, précision des touchers et TalkBack. Ne pas annoncer Release avant contrôle du run.

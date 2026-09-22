@@ -21,3 +21,6 @@ Le sélecteur Android permet de choisir Téléchargements, stockage local ou un 
 
 ## FabMap 0.3.0 : lecture par appui long
 Toucher brièvement une bulle pour zoomer, maintenir pour ouvrir un aperçu centré en gros caractères avec lecture vocale automatique ; relâcher ne ferme pas la fenêtre. « Réécouter » et « Fermer » sont explicites. Les boutons ont le même comportement : maintenir ne déclenche jamais leur action. « C'EST FAIT ! » est vert et agrandi. Sur téléphone, tester le comportement avec TalkBack et les tailles de police Android.
+
+## 0.4.0 — Vallée des bulles
+« Explorer la Vallée des bulles (2D) » ouvre une carte calculée sur les bulles réellement enregistrées dans le sous-graphe courant : couleurs de branches, liens réels, aucun concept ajouté pour remplir le vide. Glisser voyage à l'intérieur de la carte bornée ; pincer ou boutons −/+ zoome ; « Recentrer » retrouve les bulles. Toucher une bulle ouvre sa fiche guidée ; maintien donne l'aperçu vocal B. Le mode guidé reste accessible et illimité ; seule la carte limite son affichage aux 160 premières bulles pour éviter les ralentissements. Placement par relations, pas par modèle vectoriel IA. Aucune dépendance ou permission réseau supplémentaire.

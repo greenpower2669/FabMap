@@ -8,7 +8,7 @@ android {
         minSdk 26
         targetSdk 35
         versionCode 100000 + buildNumber
-        versionName "0.3.0-b" + buildNumber
+        versionName "0.4.0-b" + buildNumber
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17

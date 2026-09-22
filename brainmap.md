@@ -48,3 +48,11 @@ Le run 35665143325 compile le nouveau `BubblePacks.java` avec MainActivity et pu
 
 ## État CI 0.3.0
 Le run #5 (35694822501) du commit ff16e57a88608145aeacaa3b5b10ce80084d10fe a compilé le nouveau comportement et publié v0.3.0-b5 en Release directe, sans upload-artifact.
+
+## 0.4.0 — carte spatiale finie
+- BubbleValleyView.java : Android Canvas sans dépendance externe ; BFS des nœuds réellement accessibles depuis la bulle actuelle, identifiants uniques et arcs reconstitués après BFS pour liens partagés/cycliques. Plafond 160 pour la carte seulement.
+- Position des enfants proche du parent, angle stable dérivé de l'ID, couleurs héritées de la première branche, détection de collision de la nouvelle bulle, jamais de simulation physique animée ni de nœud inventé. Ce positionnement n'est PAS une base vectorielle IA.
+- Trame = halos autour des seules bulles existantes et traits entre vrais liens. Bornes issues des positions des bulles ; clamp du pan sur x/y, zoom .35 à 3, reset, culling de dessin hors champ, labels omis à zoom extrême.
+- OnTouchEvent + ScaleGestureDetector : pan / pinch, appui long consumé via Handler et preview vocale B, tap sur bulle ouvre la fiche guidée existante ; le vide n'a aucune action créatrice. Boutons zoom et mode guidé accessibles hors Canvas.
+- MainActivity.java : flag valley conservé après rotation, entrée depuis chaque fiche ; vue Vallée remplace temporairement le contenu guidé sans changer le JSON. Les paquets et sauvegardes restent identiques.
+- Limites connues : positions calculées sur thread UI à ouverture, plafond 160 ; Canvas ne fournit pas un objet TalkBack individuel pour chaque bulle, donc préserver le parcours guidé. Aucun asset volumineux ajouté.

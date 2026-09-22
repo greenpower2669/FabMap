@@ -36,3 +36,9 @@ Interprétation de « sauvegarde ou DL de probables » : sauvegarder/télécharg
 - Toutes les bulles et les boutons interactifs, y compris le bouton de validation, sont concernés.
 - Bouton « C'EST FAIT ! » vert, plus grand, texte clair et grande cible tactile ; sa lecture explique la validation mais ne l'effectue pas.
 - Aucun code de connexion entre personnes ; ne pas modifier la sauvegarde/import au cours de ce changement.
+
+## 0.4.0 — décision de Fab : la Vallée des bulles
+- La carte 2D existe uniquement là où il y a des bulles et liens enregistrés, à la manière d'une trame d'espace-temps créée par son contenu. Pas de grille navigable infinie, pas de bulle inventée ou créée sur le vide.
+- Exploration spatiale bornée, glisser, pincer, zoom +/- et recentrer, groupes colorés par branche ; mode guidé intégralement conservé. Appui long B (agrandissement + voix) disponible sur les bulles cartographiées.
+- Prototype sans moteur 3D, modèle d'IA ou corpus vectoriel embarqué : proximité fondée sur les relations existantes et non sur de véritables embeddings sémantiques. Objectif central : APK petit et pas de lag.
+- Limite volontaire de la carte à 160 bulles affichées, sans suppression de mémoire ; le mode guidé ne subit pas cette limite.

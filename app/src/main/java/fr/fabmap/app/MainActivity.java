@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
     private JSONObject data, nodes;
     private LinearLayout screen;
     private TextToSpeech voice;
-    private boolean edit=false, expanded=false;
+    private boolean edit=false, expanded=false, valley=false;
     private int step=0;
     private final int ink=Color.rgb(27,55,87), blue=Color.rgb(218,234,255);
     private File mediaDir;
@@ -56,13 +56,13 @@ public class MainActivity extends Activity {
         super.onCreate(b);getWindow().setStatusBarColor(ink);getWindow().setNavigationBarColor(ink);
         mediaDir=new File(getFilesDir(),"media");mediaDir.mkdirs();load();
         if(b!=null){ArrayList<String> old=b.getStringArrayList("path");if(old!=null)for(String id:old)if(obj(id)!=null)path.add(id);
-            pendingExportBubble=b.getString("exportBubble");pendingImportParent=b.getString("importParent");}
+            pendingExportBubble=b.getString("exportBubble");pendingImportParent=b.getString("importParent");valley=b.getBoolean("valley",false);}
         if(path.isEmpty())path.add("home");
         voice=new TextToSpeech(this,status->{if(status==TextToSpeech.SUCCESS)voice.setLanguage(Locale.FRENCH);});
         show();
     }
     @Override protected void onSaveInstanceState(Bundle b){b.putStringArrayList("path",new ArrayList<>(path));
-        b.putString("exportBubble",pendingExportBubble);b.putString("importParent",pendingImportParent);
+        b.putString("exportBubble",pendingExportBubble);b.putString("importParent",pendingImportParent);b.putBoolean("valley",valley);
         super.onSaveInstanceState(b);}
     private byte[] read(InputStream in,int max)throws IOException{
         ByteArrayOutputStream out=new ByteArrayOutputStream();byte[] buf=new byte[8192];int n,total=0;
@@ -169,6 +169,7 @@ public class MainActivity extends Activity {
         v.setMaxHeight(dp(300));box.addView(v,new LinearLayout.LayoutParams(-1,-2));
     }
     private void show(){
+        if(valley){showValley();return;}
         if(obj(here())==null){path.clear();path.add("home");}
         JSONObject n=current();
         screen=column();screen.setBackgroundColor(Color.rgb(249,251,255));
@@ -189,6 +190,7 @@ public class MainActivity extends Activity {
         ScrollView scroll=new ScrollView(this);screen.addView(scroll,new LinearLayout.LayoutParams(-1,0,1));
         LinearLayout body=column();scroll.addView(body);
         add(body,label(n.optString("title","Bulle"),27,true));
+        button(body,"🫧 Explorer la Vallée des bulles (2D)",()->{valley=true;show();});
         String desc=n.optString("description","");if(!desc.isEmpty()){add(body,label(desc,19,false));button(body,"🔊 Écouter",()->say(desc));}
         photoView(body,n);
         JSONArray steps=n.optJSONArray("steps");
@@ -250,6 +252,42 @@ public class MainActivity extends Activity {
                 a.put(text);save();show();
             }));
         }
+    }
+    private TextView valleyControl(String title,Runnable action){
+        TextView t=label(title,18,true);t.setGravity(Gravity.CENTER);
+        t.setMinHeight(dp(62));t.setBackground(bg(blue,false));
+        t.setOnClickListener(v->action.run());
+        previewOnLongPress(t,title,"Appuie brièvement pour utiliser ce bouton.");
+        return t;
+    }
+    private void showValley(){
+        if(path.isEmpty()||obj(here())==null){path.clear();path.add("home");}
+        screen=column();screen.setBackgroundColor(Color.rgb(247,250,255));
+        if(android.os.Build.VERSION.SDK_INT>=30)screen.setOnApplyWindowInsetsListener((v,in)->{
+            android.graphics.Insets bars=in.getInsets(WindowInsets.Type.systemBars());
+            v.setPadding(dp(8),bars.top,dp(8),bars.bottom);return in;
+        });else screen.setPadding(dp(8),dp(22),dp(8),dp(12));
+        setContentView(screen);
+        button(screen,"‹ Revenir au mode guidé",()->{valley=false;show();});
+        add(screen,label("🫧 Vallée : "+current().optString("title","Ma mémoire"),23,true));
+        add(screen,label("Bulles réelles uniquement. Glisser, pincer pour zoomer ; maintenir pour écouter.",15,false));
+        BubbleValleyView map=new BubbleValleyView(this,nodes,here(),new BubbleValleyView.Listener(){
+            @Override public void open(String id){
+                valley=false;
+                if(!here().equals(id))zoom(id);else show();
+            }
+            @Override public void preview(String title,String detail){showPreview(title,detail);}
+        });
+        screen.addView(map,new LinearLayout.LayoutParams(-1,0,1));
+        LinearLayout controls=new LinearLayout(this);
+        LinearLayout.LayoutParams left=new LinearLayout.LayoutParams(0,-2,1);
+        left.setMargins(dp(3),dp(4),dp(3),dp(4));
+        LinearLayout.LayoutParams right=new LinearLayout.LayoutParams(0,-2,1);
+        right.setMargins(dp(3),dp(4),dp(3),dp(4));
+        controls.addView(valleyControl("− Dézoomer",()->map.zoomBy(.75f)),left);
+        controls.addView(valleyControl("＋ Zoomer",()->map.zoomBy(1.33f)),right);
+        add(screen,controls);
+        button(screen,"◎ Recentrer sur les bulles",map::reset);
     }
     private void exportCurrentBubble(){
         pendingExportBubble=here();
