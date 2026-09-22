@@ -82,3 +82,8 @@ Run 35662052714 : échec SDK manager absent du PATH. Localisation explicite du b
 - [ ] Vérifier CI Java extracteur et APK Release, réparer tout échec avec les quatre mémoires dans le même commit.
 - [ ] Fab upload en binaire les planches 04–07 dans assets/icons/boards/ avec noms conventionnels ; vérifier les dimensions/cadrage réel et ajuster l'extracteur sans perdre les masters.
 - [ ] Tests sur vrai téléphone : fluidité Canvas, lisibilité des icônes 44/86 dp, import perso et sauvegarde complète, export/import branche d'une même icône utilisée deux fois, ZIP v0.4, dialogue retour/validation, simulation de stockage insuffisant.
+
+### Livraison 0.5.0 — vérification de production technique
+- [x] Run #8 https://github.com/greenpower2669/FabMap/actions/runs/35764510346 : 24 sprites extraits, :app:assembleDebug et publication GitHub Release réussis.
+- [x] https://github.com/greenpower2669/FabMap/releases/tag/v0.5.0-b8 ; APK direct https://github.com/greenpower2669/FabMap/releases/download/v0.5.0-b8/FabMap-v0.5.0-b8-debug.apk, 742367 octets.
+- [ ] Tests réels de sélection et ajout d'icône, sauvegarde/import d'une branche et récupération complète, rendu Canvas et ancienne mémoire ; 04–07 attendent upload de Fab.

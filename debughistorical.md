@@ -68,3 +68,6 @@
 - JPEG custom séparé des masters, limite mémoire par décodage échantillonné et 256px ; sauvegarde dans media/. ZIP de branche : vérifier fichier utilisé et remapper refs à l'import ; pas de crash si source built-in absente. Les références custom malformées devront être testées manuellement.
 - Procédure TV démonstration SOURCE déjà existante dans certaines mémoires : ne pas l'écraser automatiquement. Ajouter distinctement la procédure réelle à la demande, deux chemins conditionnels, sans inventer de touche source ni durée.
 - Build et tests Android **à vérifier après push**, signature debug temporaire : export complet avant toute désinstallation. Test à effectuer : import d'une image PNG avec transparence, conversion JPEG, deux exports/imports branche, vieux ZIP, upload futur 04–07, rendu carte à 160 bulles.
+
+### Run #8 — succès de build, limites conservées
+https://github.com/greenpower2669/FabMap/actions/runs/35764510346 : extraction 24 sprites, compilation et publication directe réussies ; APK v0.5.0-b8, 742367 octets. Ce test ne prouve ni le rendu ni la restauration des icônes sur téléphone. La signature debug reste éphémère ; export avant désinstallation.
