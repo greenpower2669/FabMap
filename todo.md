@@ -87,3 +87,9 @@ Run 35662052714 : échec SDK manager absent du PATH. Localisation explicite du b
 - [x] Run #8 https://github.com/greenpower2669/FabMap/actions/runs/35764510346 : 24 sprites extraits, :app:assembleDebug et publication GitHub Release réussis.
 - [x] https://github.com/greenpower2669/FabMap/releases/tag/v0.5.0-b8 ; APK direct https://github.com/greenpower2669/FabMap/releases/download/v0.5.0-b8/FabMap-v0.5.0-b8-debug.apk, 742367 octets.
 - [ ] Tests réels de sélection et ajout d'icône, sauvegarde/import d'une branche et récupération complète, rendu Canvas et ancienne mémoire ; 04–07 attendent upload de Fab.
+
+## 0.5.1 — corriger TV + titres des icônes
+- [x] Supprimer bouton/méthode « Installer la procédure TV réelle », intégrer branche ON/OFF → observer → HDMI3 **ou** ON/OFF TV selon l'écran dans la démonstration.
+- [x] Migration non destructive de la démonstration précédente lorsque contenu source inchangé ; réutiliser l'ancienne branche installée sans créer un doublon ; garder export complet et icônes personnalisées.
+- [x] Bandeaux contrastés + ombres séparant titres et images dans la Vallée et les tuiles du mode guidé.
+- [ ] Vérifier javac/Gradle, CI, Release et lien APK direct ; consigner preuves puis tester migration ancienne mémoire, présence d'un ancien `fabmap-tv-real`, TV personnalisée, contraste/zoom, appui long et sauvegarde sur téléphone.

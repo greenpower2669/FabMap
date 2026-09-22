@@ -75,16 +75,15 @@ public class MainActivity extends Activity {
         try(FileInputStream in=new FileInputStream(f)){
             data=new JSONObject(new String(read(in,5_000_000),StandardCharsets.UTF_8));nodes=data.getJSONObject("nodes");
             if(data.optInt("schema")!=1||obj("home")==null)throw new IOException("Format de mémoire inconnu");
+            if(TvDemo.refresh(nodes))save();
         }catch(Exception ex){
             if(f.exists())f.renameTo(new File(getFilesDir(),"map-invalid-"+System.currentTimeMillis()+".json"));
             data=new JSONObject();nodes=new JSONObject();p(data,"schema",1);p(data,"nodes",nodes);
             p(nodes,"home",node("home","Ma maison","Entrez dans une bulle pour découvrir les suivantes.","piece"));
             p(nodes,"piece",node("piece","Ma grande pièce","Ma pièce de vie.","tele","chatgpt"));
-            p(nodes,"tele",node("tele","Ma télévision","Retrouver les gestes et les boutons utiles.","telecommande","chaines"));
-            p(nodes,"telecommande",node("telecommande","Ma télécommande","On peut ajouter sa photographie.","source"));
-            p(nodes,"source",node("source","Bouton SOURCE","Appuyer sur SOURCE pour changer l'entrée vidéo."));
-            p(nodes,"chaines",node("chaines","Retrouver les chaînes","Un geste à la fois."));
-            p(obj("chaines"),"steps",arr("Prends la télécommande.","Appuie sur SOURCE.","Choisis l'entrée reliée à ta box ou à la télévision.","Vérifie que les chaînes s'affichent."));
+            p(nodes,"tele",node("tele","Ma télévision","Retrouver les gestes et les boutons utiles.","telecommande"));
+            p(nodes,"telecommande",node("telecommande","Ma télécommande","On peut ajouter sa photographie."));
+            TvDemo.refresh(nodes);
             p(nodes,"chatgpt",node("chatgpt","Ouvrir ChatGPT","Le navigateur ouvre ChatGPT ; aucune connexion n'est copiée."));
             p(obj("chatgpt"),"url","https://chatgpt.com");save();
         }
@@ -212,13 +211,28 @@ public class MainActivity extends Activity {
             LinearLayout row=new LinearLayout(this);body.addView(row);
             for(int j=start;j<Math.min(start+2,Math.min(count,expanded?count:4));j++){
                 String id=children.optString(j);JSONObject child=obj(id);if(child==null)continue;
-                TextView bubble=label(child.optString("title"),18,true);bubble.setGravity(Gravity.CENTER);
-                android.graphics.drawable.Drawable little=iconAssets.drawable(child.optString("icon",""),44);
-                if(little!=null){bubble.setCompoundDrawables(null,little,null,null);bubble.setCompoundDrawablePadding(dp(5));}
-                bubble.setBackground(bg((j%4==0)?blue:(j%4==1?0xffe0f4e8:(j%4==2?0xfff6e6ff:0xffffefd8)),true));
-                LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(0,dp(140),1);lp.setMargins(dp(5),dp(6),dp(5),dp(6));row.addView(bubble,lp);
-                bubble.setOnClickListener(v->zoom(id));
-                previewOnLongPress(bubble,child.optString("title"),child.optString("description"));
+                LinearLayout tile=column();tile.setGravity(Gravity.CENTER);
+                tile.setPadding(dp(7),dp(9),dp(7),dp(9));
+                tile.setBackground(bg((j%4==0)?blue:(j%4==1?0xffe0f4e8:(j%4==2?0xfff6e6ff:0xffffefd8)),false));
+                tile.setElevation(dp(5));
+                ImageView pictogram=iconAssets.view(child.optString("icon",""),66);
+                if(pictogram!=null){
+                    pictogram.setContentDescription("Icône de "+child.optString("title","Bulle"));
+                    tile.addView(pictogram);
+                }
+                TextView title=label(child.optString("title","Bulle"),19,true);
+                title.setGravity(Gravity.CENTER);
+                title.setTextColor(Color.WHITE);
+                title.setBackground(bg(0xff1B3657,false));
+                title.setShadowLayer(dp(2),dp(1),dp(2),0xff000000);
+                title.setMinHeight(dp(65));
+                LinearLayout.LayoutParams titleParams=new LinearLayout.LayoutParams(-1,-2);
+                titleParams.topMargin=dp(8);tile.addView(title,titleParams);
+                LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(0,-2,1);
+                lp.setMargins(dp(5),dp(6),dp(5),dp(6));row.addView(tile,lp);
+                tile.setMinimumHeight(dp(152));
+                tile.setOnClickListener(v->zoom(id));
+                previewOnLongPress(tile,child.optString("title"),child.optString("description"));
             }
         }}
         if(count>4)button(body,expanded?"Voir moins":"Voir les autres bulles",()->{expanded=!expanded;show();});
@@ -256,7 +270,6 @@ public class MainActivity extends Activity {
             if("home".equals(here())){
                 button(body,"🫧 Installer les bulles des icônes",this::installIconCatalog);
             }
-            button(body,"📺 Installer la procédure TV réelle",this::installTvProcedure);
             button(body,"＋ Ajouter une étape",()->input("Nouvelle étape","Instruction",text->{
                 JSONArray a=current().optJSONArray("steps");if(a==null){a=new JSONArray();p(current(),"steps",a);}
                 a.put(text);save();show();
@@ -327,34 +340,6 @@ public class MainActivity extends Activity {
                 if(IconAssets.installCatalog(nodes)){save();show();
                     Toast.makeText(this,"Catalogue de bulles ajouté",Toast.LENGTH_LONG).show();}
                 else Toast.makeText(this,"Catalogue déjà présent",Toast.LENGTH_LONG).show();
-            }).show();
-    }
-    private void installTvProcedure(){
-        final JSONObject television=obj("tele");
-        if(television==null){Toast.makeText(this,"Bulle TV de démonstration absente",Toast.LENGTH_LONG).show();return;}
-        if(obj("fabmap-tv-real")!=null){Toast.makeText(this,"Procédure TV déjà présente",Toast.LENGTH_LONG).show();return;}
-        new AlertDialog.Builder(this).setTitle("Vraie procédure TV")
-            .setMessage("Ajouter la procédure réelle sous Ma télévision sans effacer tes anciennes bulles ?")
-            .setNegativeButton("Annuler",null)
-            .setPositiveButton("Ajouter",(d,w)->{
-                JSONObject start=node("fabmap-tv-real","Allumer la télévision",
-                    "Allumer, observer l'écran, puis choisir uniquement le cas rencontré.",
-                    "fabmap-tv-pay","fabmap-tv-black");
-                p(start,"icon","built:01-02");
-                p(start,"steps",arr("Allume la télévision avec la télécommande, au moyen du bouton ON/OFF indiqué dessus.",
-                    "Regarde ce qui apparaît à l'écran, puis ouvre la bulle correspondant à ton cas."));
-                JSONObject pay=node("fabmap-tv-pay","Vue des chaînes payantes et autres",
-                    "Ce choix s'applique seulement si cette vue apparaît.");
-                p(pay,"steps",arr("Cherche et sélectionne HDMI3.","Attends que l'affichage apparaisse. Cela peut parfois être long."));
-                JSONObject black=node("fabmap-tv-black","Écran noir",
-                    "Ce choix s'applique seulement lorsque l'écran est noir.");
-                p(black,"steps",arr("Reprends la télécommande TV, celle dont le bouton ON/OFF porte TV à côté.",
-                    "Appuie sur ce bouton ON/OFF.","Attends l'affichage. Cela peut parfois être long."));
-                p(nodes,"fabmap-tv-real",start);p(nodes,"fabmap-tv-pay",pay);p(nodes,"fabmap-tv-black",black);
-                JSONArray links=television.optJSONArray("children");
-                if(links==null){links=new JSONArray();p(television,"children",links);}
-                if(!contains(links,"fabmap-tv-real"))links.put("fabmap-tv-real");
-                save();show();
             }).show();
     }
     private void exportCurrentBubble(){

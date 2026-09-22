@@ -182,7 +182,7 @@ final class BubbleValleyView extends View {
                 paint.setColor(Color.WHITE);
                 c.drawBitmap(itemIcon,null,new android.graphics.RectF(x-side/2f,y-r*.80f,x+side/2f,y-r*.80f+side),paint);
             }
-            paint.setColor(Color.WHITE);
+            // Title is a separate high-contrast badge, never printed on the icon.
             paint.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
             paint.setTextSize(density*Math.max(11,Math.min(19,16*scale)));
             paint.setTextAlign(Paint.Align.CENTER);
@@ -196,8 +196,21 @@ final class BubbleValleyView extends View {
             }
             String a=truncate(first.toString(),r*1.65f);
             String d=truncate(second.toString(),r*1.65f);
-            c.drawText(a,x,d.isEmpty()?y+density*4:y-density*4,paint);
-            if(!d.isEmpty())c.drawText(d,x,y+density*16,paint);
+            float badgeTop=y+r*.16f,badgeBottom=y+r*.94f;
+            paint.setColor(0xff142E4C);
+            paint.setStyle(Paint.Style.FILL);
+            paint.setShadowLayer(density*4,0,density*2,0xaa000000);
+            c.drawRoundRect(x-r*.94f,badgeTop,x+r*.94f,badgeBottom,density*9,density*9,paint);
+            paint.clearShadowLayer();
+            paint.setColor(Color.WHITE);
+            paint.setShadowLayer(density*2,0,density,0xdd000000);
+            if(d.isEmpty()){
+                c.drawText(a,x,y+r*.66f,paint);
+            }else{
+                c.drawText(a,x,y+r*.48f,paint);
+                c.drawText(d,x,y+r*.75f,paint);
+            }
+            paint.clearShadowLayer();
         }
         if(limitReached){
             paint.setColor(0xff234568);paint.setTextAlign(Paint.Align.LEFT);

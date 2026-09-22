@@ -78,3 +78,9 @@ Run #7 35748911214 du commit d47fe34a56efbf833b441484d3cd318936d9b5fb : assemble
 
 ### Preuves CI 0.5.0
 Run 35764510346 sur 0927b28c36e2833f253c7bd8b51bdfbf4921504b : extracteur 24 petites icônes, assembleDebug réussi, Release v0.5.0-b8 créée, APK 742367 octets. Le dépôt contient uniquement assets/icons/boards/01-themes.png, 02-actions.png, 03-etats.png comme planches masters, et aucun PNG anonyme à la racine.
+
+## 0.5.1 — correction architecture TV et étiquettes
+- Nouveau `TvDemo.java` : génération du parcours conditionnel dès la création d'une mémoire, migration uniquement des nœuds ayant les titres/explications/étapes exacts de l'ancien exemple TV. Préserve JSON utilisateur ; si `fabmap-tv-real` existe (ancien installateur), le réutilise comme branche d'entrée afin d'éviter un doublon visible. Pas de commande d'installation TV. Les anciens identifiants `source` et `chaines` peuvent rester dans le JSON pour protéger d'autres liens, mais leur contenu par défaut reconnu est actualisé et seuls les anciens liens de navigation de démonstration sont retirés.
+- `MainActivity.load()` appelle `TvDemo.refresh(nodes)` après lecture et dans le scénario vierge. Le bouton et la méthode `installTvProcedure()` sont supprimés ; les fonctions de sauvegarde et d'icônes ne sont pas modifiées.
+- `MainActivity.show()` : une tuile verticale par enfant : icône dédiée au-dessus, texte dans son propre bandeau bleu nuit à lettres blanches avec ombre et élévation ; click/long click sur toute la tuile, chemin préservé.
+- `BubbleValleyView.onDraw()` : image dans la partie supérieure, titre dessiné dans un cartouche arrondi sombre dans la partie basse avec ombre, séparé du pictogramme ; pas de nouveau bitmap géant ni nouvelle dépendance.

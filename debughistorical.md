@@ -71,3 +71,8 @@
 
 ### Run #8 — succès de build, limites conservées
 https://github.com/greenpower2669/FabMap/actions/runs/35764510346 : extraction 24 sprites, compilation et publication directe réussies ; APK v0.5.0-b8, 742367 octets. Ce test ne prouve ni le rendu ni la restauration des icônes sur téléphone. La signature debug reste éphémère ; export avant désinstallation.
+
+## 0.5.1 — régression signalée directement par Fab
+- Erreur d'interprétation **confirmée** : j'avais créé « Installer la procédure TV réelle » au lieu de remplacer les consignes TV intégrées. Correction : retirer cette action, ajouter un parcours TV conditionnel dans les données initiales, migration limitée aux champs strictement égaux à l'ancien exemple ; aucune réécriture globale des cartes utilisateur.
+- Problème visuel confirmé par Fab : les titres de navigation Canvas étaient dessinés sur les icônes, sans contraste. Correction : icône et titre physiquement séparés, titre en cartouche opaque sombre, blanc + ombre ; mêmes principes appliqués au guidé. L'accès vocal B reste inchangé.
+- Limite honnête : anciens nœuds SOURCE/chaînes très personnalisés ne seront pas écrasés ; TV déjà installée est réutilisée par son ID existant. Tests téléphone de lisibilité, appui long, migration et liens partagés restent indispensables. CI 0.5.1 non encore vérifiée au moment de ce commit.
