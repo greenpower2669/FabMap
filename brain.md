@@ -45,3 +45,6 @@ Interprétation de « sauvegarde ou DL de probables » : sauvegarder/télécharg
 
 ### État de compilation 0.4.0
 Premier build échoué dans Java (initialisation d'un Listener dans un Runnable de champ), correctif technique sans changement du contrat fonctionnel ; la livraison dépend de la validation du prochain run.
+
+### Livraison 0.4.0
+La compilation Android et la Release du prototype Vallée des bulles v0.4.0-b7 ont été vérifiées sur CI ; les gestes et les performances sur téléphone restent non testés.

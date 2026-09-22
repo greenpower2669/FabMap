@@ -59,3 +59,6 @@ Le run #5 (35694822501) du commit ff16e57a88608145aeacaa3b5b10ce80084d10fe a com
 
 ### Dépendance d'initialisation réparée
 Le Runnable d'appui long défini comme champ accède à listener assigné dans le constructeur de BubbleValleyView. La déclaration de Listener n'est plus blank final, pour satisfaire l'analyse d'affectation de javac tout en gardant l'attribution avant toute interaction utilisateur.
+
+### Livraison 0.4.0 validée côté compilation
+Run #7 35748911214 du commit d47fe34a56efbf833b441484d3cd318936d9b5fb : assembleDebug et publication en Release directe réussis (43 775 octets). L'ergonomie Canvas reste à vérifier sur appareil.

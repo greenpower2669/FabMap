@@ -51,3 +51,6 @@
 
 ### Run #6 — échec de compilation prouvé
 - https://github.com/greenpower2669/FabMap/actions/runs/35748705120 : SDK et Gradle réussis, échec compileDebugJavaWithJavac : BubbleValleyView.java:209 « variable listener might not have been initialized » ; gh release ignorée. Cause : Runnable de champ capturant un blank final assigné plus tard dans le constructeur. Correctif : rendre listener non-final ; aucune autre modification de logique.
+
+### Run #7 — correctif Java et Release vérifiés
+- https://github.com/greenpower2669/FabMap/actions/runs/35748911214 : compilation, étapes SDK et publication réussies après correction du Listener ; v0.4.0-b7, APK 43775 octets. Aucun test instrumental Android ou utilisateur n'a été exécuté.

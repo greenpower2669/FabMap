@@ -58,3 +58,8 @@ Run 35662052714 : échec SDK manager absent du PATH. Localisation explicite du b
 
 ### CI 0.4.0 après run #6
 - Run #6 échec javac sur Listener final dans l'initialiseur de champ ; correctif appliqué avec les quatre mémoires. Nouveau run à vérifier ; aucune APK 0.4.0 publiée à cette étape.
+
+### Livraison 0.4.0 vérifiée
+- Run #7 : https://github.com/greenpower2669/FabMap/actions/runs/35748911214 — success, compilation APK et création GitHub Release.
+- Page https://github.com/greenpower2669/FabMap/releases/tag/v0.4.0-b7 ; APK direct https://github.com/greenpower2669/FabMap/releases/download/v0.4.0-b7/FabMap-v0.4.0-b7-debug.apk (43 775 octets).
+- Reste impératif : test humain sur téléphone, fluidité/pan, lisibilité et geste vocal B, sauvegarde complète avant toute désinstallation de build debug antérieure.
