@@ -100,3 +100,6 @@ La v0.5.2-b10 (24 sprites PNG alpha, rendu sobre et import PNG personnel) est pu
 - ⚙ sur chaque bulle : nom/explication, image (galerie/caméra/pictogramme/retrait), pictogramme, étapes, lien existant, **Exporter cette bulle et ses filles avec tous leurs fichiers liés**, **Importer des bulles ici**, ajouter une fille. Un export emporte les descendants, photos JPG/PNG et icônes personnalisées JPG/PNG effectivement référencées ; les icônes built-in gardent leur ID ; les sentiments/couleurs sont dans le JSON. « Télécharger » n'est plus un synonyme d'export.
 - ⚙ général sur l'accueil SEULEMENT : sauvegarder toute la mémoire, restauration complète avec avertissement de remplacement. Ces actions globales ne s'affichent plus sous chaque bulle. Ne pas confondre crayon/engrenages/plus.
 - Couleur cognitive individuelle prioritaire sur palette de branche, teinte guidée éclaircie pour lisibilité ; titre bi-teinte/ombre, médaillon translucide, PNG alpha ; aucune conversion Base64/serveur, archives anciennes compatibles.
+
+### Livraison 0.6.0 — vérification technique
+Run #11 : extraction de 24 sprites et compilation APK réussies, GitHub Release v0.6.0-b11 publiée. La validation des gestes et du contenu des archives reste à réaliser par Fab sur téléphone. La signature debug est temporaire : sauvegarde complète avant toute désinstallation.

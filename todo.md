@@ -119,3 +119,8 @@ Run 35662052714 : échec SDK manager absent du PATH. Localisation explicite du b
 - [x] Image pour toutes les bulles, priorité photo JPG/PNG puis pictogramme puis symbole neutre ; archives de branches et mémoire complète acceptent JPG/PNG et anciennes icônes.
 - [ ] Contrôler compilation/Release Android v0.6.0 et inscrire preuves dans les quatre mémoires au même cycle documentaire.
 - [ ] Tests téléphone : placement boutons, zoom et appui long, création sous bulle ciblée, choix photo/caméra, hexagones et valeurs invalides, ressentis et vieille mémoire, pack ZIP avec photos/icônes JPG/PNG, restauration complète. Sauvegarder avant désinstaller un debug.
+
+### Livraison v0.6.0-b11
+- [x] https://github.com/greenpower2669/FabMap/actions/runs/35853316638 : build #11 réussi, 24 sprites générés, publication GitHub Release.
+- [x] https://github.com/greenpower2669/FabMap/releases/tag/v0.6.0-b11 ; APK directe https://github.com/greenpower2669/FabMap/releases/download/v0.6.0-b11/FabMap-v0.6.0-b11-debug.apk (819771 octets).
+- [ ] Contrôle humain des trois actions, ergonomie de la Vallée, image, hexagones/émotions et aller-retour archives sur téléphone. Exporter toute sa mémoire avant désinstaller une version debug.
