@@ -35,7 +35,7 @@ final class BubblePacks {
         return out.toByteArray();
     }
     private static boolean photoName(String name){
-        return name.matches("[a-zA-Z0-9_-]+\\.jpg");
+        return name.matches("[a-zA-Z0-9_-]+\\.(jpg|png)");
     }
     private static boolean mediaName(String name){
         return name.matches("[a-zA-Z0-9_-]+\\.(jpg|png)");

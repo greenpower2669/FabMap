@@ -53,6 +53,41 @@ final class IconAssets {
         if(bitmap!=null)cache.put(icon,bitmap);
         return bitmap;
     }
+    /** Photo represents the bubble when present; otherwise user/default icon. */
+    Bitmap representation(JSONObject node){
+        if(node==null)return null;
+        String photo=node.optString("photo","");
+        if(photo.matches("[a-zA-Z0-9_-]+\\.(jpg|png)")){
+            String key="photo:"+photo;
+            Bitmap cached=cache.get(key);
+            if(cached!=null)return cached;
+            File file=new File(media,photo);
+            if(file.isFile()){
+                BitmapFactory.Options options=new BitmapFactory.Options();
+                options.inJustDecodeBounds=true;
+                BitmapFactory.decodeFile(file.getAbsolutePath(),options);
+                if(options.outWidth>0&&options.outHeight>0){
+                    options.inJustDecodeBounds=false;options.inSampleSize=1;
+                    while(options.outWidth/options.inSampleSize>300||
+                          options.outHeight/options.inSampleSize>300)options.inSampleSize*=2;
+                    Bitmap bitmap=BitmapFactory.decodeFile(file.getAbsolutePath(),options);
+                    if(bitmap!=null){cache.put(key,bitmap);return bitmap;}
+                }
+            }
+        }
+        Bitmap icon=get(node.optString("icon",""));
+        if(icon!=null)return icon;
+        return null; // Unillustrated bubbles receive a neutral symbolic representation.
+    }
+    ImageView representationView(JSONObject node,int dp){
+        Bitmap bm=representation(node);if(bm==null)return null;
+        ImageView image=new ImageView(context);
+        int size=(int)(dp*context.getResources().getDisplayMetrics().density+.5f);
+        image.setImageBitmap(bm);image.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        image.setLayoutParams(new android.widget.LinearLayout.LayoutParams(size,size));
+        image.setContentDescription("Image de représentation");
+        return image;
+    }
     ImageView view(String icon,int dp){
         Bitmap bm=get(icon);if(bm==null)return null;
         ImageView image=new ImageView(context);

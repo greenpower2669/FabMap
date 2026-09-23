@@ -96,3 +96,11 @@ Run 35769861235 du commit a39c9a308b198e75805fe3fa189d1022602e9697 : sprites gé
 
 ### CI 0.5.2 vérifiée
 Run #10 35783702585 sur dfef1851b129887c5ed21f8f05c2da12f228a798 : extracteur de 24 PNG à coins transparents réussi, compilation assembleDebug et création de Release v0.5.2-b10 réussies (811831 octets). La CI n'effectue pas de test tactile ni d'export/import sur téléphone.
+
+## 0.6.0 — Carte d'architecture
+- BubbleStyle.java : validate hex 6 caractères, couleur individuelle, mélange de fond clair, ressenti/évocations lus en aperçu vocal ; sens ordinaire conservé.
+- HexColorTile.java : View Canvas bouton hexagonal grand, nommé, contrasté, avec sélection ; EditText #RRGGBB en complément. MainActivity.customizeBubble(id) modifie uniquement nœud ciblé (cognitiveColor, cognitiveFeelings, cognitiveEvocation) ou réinitialise.
+- IconAssets.representation(node) : JPG/PNG photo privée en priorité, puis icône user/built, sinon symbole neutre ; décodage miniature en cache 3 Mo. Même identité sur tuile guidée, fiche et BubbleValleyView ; media/ conserve l'image de représentation.
+- MainActivity.bubbleTools(id) visible sur la fiche et chaque fille indépendamment de l'ancien mode edit : crayon, + central dessous, engrenage. Les actions capturent l'ID du nœud, jamais uniquement le here() actuel. newBubble(parentId) rattache à ce parent et navigue sur le bon chemin. bubbleOptions(id) regroupe l'édition et exporter/importer la branche. generalSettings() expose seulement sur home la sauvegarde et restauration complètes.
+- BubbleValleyView : image/photo + couleur cognitive, commandes crayon gauche/+ en dessous/engrenage droite, hit-testing avant ouverture normale, pan/pinch/long B conservés. Les commandes disparaissent à faible zoom pour réduire l'encombrement ; parcours guidé toujours disponible (Canvas pas d'objets TalkBack par bulle).
+- JSON schema 1 inchangé et import ancien admis. La galerie choisie pour la représentation encode en PNG alpha via IconAssets ; caméra miniature JPG ; BubblePacks.photoName() accepte désormais JPG et PNG. Export/import de branche inclut les nœuds copiés (champs cognitifs et étapes) et médias liés photo + icônes custom, en conservant extensions/remappage. Sauvegarde globale ZIP JPG/PNG inchangée.

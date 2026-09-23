@@ -110,3 +110,12 @@ Run 35662052714 : échec SDK manager absent du PATH. Localisation explicite du b
 - [x] Run #10 https://github.com/greenpower2669/FabMap/actions/runs/35783702585 : build success, 24 sprites PNG générés et APK publiée directement en GitHub Release.
 - [x] https://github.com/greenpower2669/FabMap/releases/tag/v0.5.2-b10 ; APK direct https://github.com/greenpower2669/FabMap/releases/download/v0.5.2-b10/FabMap-v0.5.2-b10-debug.apk (811831 octets).
 - [ ] Fab : tester rendu bi-teinte/ombres et incrustation transparente sur téléphone et l'aller-retour PNG/JPEG sauvegarde et import de branche ; exporter mémoire complète avant désinstallation.
+
+## 0.6.0 — trois boutons, image et sémantique
+- [x] Par bulle, crayon couleur/sentiment/évocation, + sous la bulle pour sa fille, engrenage d'options, en guidé et Vallée zoomée sans changer appui long B.
+- [x] Paramètres généraux d'accueil uniquement pour sauvegarde/restauration complètes, avec confirmation de remplacement ; supprimer les actions globales répétées dans chaque fiche.
+- [x] Options locales : renommer, image de représentation et pictogramme, étapes, lien existant, « Exporter cette bulle et ses filles (avec leurs fichiers liés) », « Importer des bulles ici ».
+- [x] Palette en hexagones nommés, champ #RRGGBB et évocations/sentiments personnels ; couleur individuelle sans détruire sens habituel et liens ; transfert via JSON.
+- [x] Image pour toutes les bulles, priorité photo JPG/PNG puis pictogramme puis symbole neutre ; archives de branches et mémoire complète acceptent JPG/PNG et anciennes icônes.
+- [ ] Contrôler compilation/Release Android v0.6.0 et inscrire preuves dans les quatre mémoires au même cycle documentaire.
+- [ ] Tests téléphone : placement boutons, zoom et appui long, création sous bulle ciblée, choix photo/caméra, hexagones et valeurs invalides, ressentis et vieille mémoire, pack ZIP avec photos/icônes JPG/PNG, restauration complète. Sauvegarder avant désinstaller un debug.

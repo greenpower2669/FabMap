@@ -25,6 +25,9 @@ final class BubbleValleyView extends View {
     interface Listener {
         void open(String id);
         void preview(String title,String explanation);
+        void add(String id);
+        void customize(String id);
+        void options(String id);
     }
     private static final int CAP=160;
     private static final int[] COLORS={0xff3C72B2,0xff298B75,0xff9564AE,0xffAD7142,0xffAD5A7C,0xff428C9B,0xff898D42};
@@ -47,15 +50,17 @@ final class BubbleValleyView extends View {
     private final Handler handler=new Handler(Looper.getMainLooper());
     private Listener listener;
     private final IconAssets iconAssets;
+    private final JSONObject graph;
     private final ScaleGestureDetector pinch;
     private final float density,slop;
     private float minX=-130,maxX=130,minY=-130,maxY=130;
     private float scale=1f,panX,panY,downX,downY,lastX,lastY;
-    private Bubble down;
+    private Bubble down, controlBubble;
+    private int controlIndex=-1;
     private boolean moved,longPressed,pinching,limitReached;
 
     BubbleValleyView(Context context,JSONObject nodes,String root,IconAssets icons,Listener listener) {
-        super(context);this.listener=listener;this.iconAssets=icons;
+        super(context);this.listener=listener;this.iconAssets=icons;this.graph=nodes;
         density=getResources().getDisplayMetrics().density;
         slop=ViewConfiguration.get(context).getScaledTouchSlop();
         build(nodes,root);
@@ -82,7 +87,7 @@ final class BubbleValleyView extends View {
     private void build(JSONObject graph,String rootId) {
         JSONObject first=graph.optJSONObject(rootId);
         if(first==null)return;
-        Bubble center=new Bubble(rootId,first.optString("title","Bulle"),first.optString("description",""),first.optString("icon",""),0,0xff315D97,0,0);
+        Bubble center=new Bubble(rootId,first.optString("title","Bulle"),BubbleStyle.preview(first),first.optString("icon",""),0,BubbleStyle.userColor(first,0xff315D97),0,0);
         all.add(center);indexed.put(rootId,center);
         ArrayDeque<Bubble> queue=new ArrayDeque<>();queue.add(center);
         while(!queue.isEmpty()&&all.size()<CAP) {
@@ -100,7 +105,7 @@ final class BubbleValleyView extends View {
                 float distance=parent.depth==0?330:180;
                 float startX=parent.x+(float)Math.cos(a)*distance;
                 float startY=parent.y+(float)Math.sin(a)*distance;
-                Bubble next=new Bubble(id,child.optString("title","Bulle"),child.optString("description",""),child.optString("icon",""),depth,color,startX,startY);
+                Bubble next=new Bubble(id,child.optString("title","Bulle"),BubbleStyle.preview(child),child.optString("icon",""),depth,BubbleStyle.userColor(child,color),startX,startY);
                 // Reposition only the incoming bubble; older positions remain unchanged.
                 for(int attempt=0;attempt<90;attempt++){
                     boolean collision=false;
@@ -126,8 +131,8 @@ final class BubbleValleyView extends View {
                 Bubble child=indexed.get(children.optString(i));
                 if(child!=null)edges.add(new Edge(b,child));
             }
-            minX=Math.min(minX,b.x-b.r-30);maxX=Math.max(maxX,b.x+b.r+30);
-            minY=Math.min(minY,b.y-b.r-30);maxY=Math.max(maxY,b.y+b.r+30);
+            minX=Math.min(minX,b.x-b.r-60);maxX=Math.max(maxX,b.x+b.r+60);
+            minY=Math.min(minY,b.y-b.r-60);maxY=Math.max(maxY,b.y+b.r+90);
         }
     }
     @Override protected void onSizeChanged(int w,int h,int oldW,int oldH){
@@ -179,8 +184,8 @@ final class BubbleValleyView extends View {
             paint.setColor((b.color&0xffffff)|0x50000000);c.drawCircle(x,y,r+px(11),paint);
             paint.setColor(b.color);c.drawCircle(x,y,r,paint);
             if(scale<.43f)continue;
-            Bitmap itemIcon=iconAssets.get(b.icon);
-            if(itemIcon!=null){
+            Bitmap itemIcon=iconAssets.representation(graph.optJSONObject(b.id));
+            {
                 float centerY=y-r*.43f,side=r*.80f;
                 // Transparent glass backing, not a white image rectangle.
                 paint.setStyle(Paint.Style.FILL);
@@ -192,8 +197,13 @@ final class BubbleValleyView extends View {
                 c.drawCircle(x,centerY,r*.49f,paint);
                 paint.setStyle(Paint.Style.FILL);
                 paint.setColor(Color.WHITE);
-                c.drawBitmap(itemIcon,null,new android.graphics.RectF(
+                if(itemIcon!=null)c.drawBitmap(itemIcon,null,new android.graphics.RectF(
                     x-side/2f,centerY-side/2f,x+side/2f,centerY+side/2f),paint);
+                else{
+                    paint.setColor(Color.WHITE);paint.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
+                    paint.setTextAlign(Paint.Align.CENTER);paint.setTextSize(Math.max(18*density,r*.60f));
+                    c.drawText("◉",x,centerY+r*.20f,paint);
+                }
             }
             // Subtle two-tone lettering + soft shadow; never an opaque banner.
             paint.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
@@ -209,8 +219,10 @@ final class BubbleValleyView extends View {
             }
             String a=truncate(first.toString(),r*1.65f);
             String d=truncate(second.toString(),r*1.65f);
+            boolean light=Color.luminance(b.color)>.53;
             paint.setShader(new LinearGradient(x-r*.88f,0,x+r*.88f,0,
-                0xffFFFFFF,0xffC3E8F8,Shader.TileMode.CLAMP));
+                light?0xff142B41:0xffFFFFFF,
+                light?0xff285879:0xffC3E8F8,Shader.TileMode.CLAMP));
             paint.setShadowLayer(density*2.6f,0,density*1.3f,0xd010293e);
             if(d.isEmpty()){
                 c.drawText(a,x,itemIcon==null?y+r*.18f:y+r*.50f,paint);
@@ -221,12 +233,56 @@ final class BubbleValleyView extends View {
             }
             paint.clearShadowLayer();
             paint.setShader(null);
+            if(scale>=.70f)drawControls(c,b,x,y,r);
         }
         if(limitReached){
             paint.setColor(0xff234568);paint.setTextAlign(Paint.Align.LEFT);
             paint.setTextSize(12*density);
             c.drawText("160 bulles affichées · le mode guidé reste complet",7*density,getHeight()-11*density,paint);
         }
+    }
+    private float controlX(Bubble bubble,int kind){
+        float x=sx(bubble.x),r=px(bubble.r);
+        return kind==0?x-r*.84f:kind==2?x+r*.84f:x;
+    }
+    private float controlY(Bubble bubble,int kind){
+        float y=sy(bubble.y),r=px(bubble.r);
+        return kind==1?y+r+16*density:y+r*.67f;
+    }
+    private void drawControls(Canvas c,Bubble bubble,float x,float y,float r){
+        final String[] glyphs={"✎","＋","⚙"};
+        for(int kind=0;kind<3;kind++){
+            float cx=controlX(bubble,kind),cy=controlY(bubble,kind);
+            float radius=17*density;
+            paint.setStyle(Paint.Style.FILL);
+            paint.setColor(0xeef5faff);
+            paint.setShadowLayer(2*density,0,density,0x66000000);
+            c.drawCircle(cx,cy,radius,paint);paint.clearShadowLayer();
+            paint.setStyle(Paint.Style.STROKE);paint.setStrokeWidth(density);
+            paint.setColor(0xff416681);c.drawCircle(cx,cy,radius,paint);
+            paint.setStyle(Paint.Style.FILL);paint.setColor(0xff173B57);
+            paint.setTextAlign(Paint.Align.CENTER);
+            paint.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
+            paint.setTextSize(21*density);
+            c.drawText(glyphs[kind],cx,cy+7*density,paint);
+        }
+    }
+    private static final class ControlHit{
+        final Bubble bubble;final int kind;
+        ControlHit(Bubble bubble,int kind){this.bubble=bubble;this.kind=kind;}
+    }
+    private ControlHit hitControl(float x,float y){
+        if(scale<.70f)return null; // Guided mode always exposes accessible action buttons.
+        for(int i=all.size()-1;i>=0;i--){
+            Bubble b=all.get(i);
+            if(!visible(b))continue;
+            for(int kind=0;kind<3;kind++){
+                float dx=x-controlX(b,kind),dy=y-controlY(b,kind);
+                float tap=25*density;
+                if(dx*dx+dy*dy<=tap*tap)return new ControlHit(b,kind);
+            }
+        }
+        return null;
     }
     private String truncate(String s,float max){
         if(paint.measureText(s)<=max)return s;
@@ -246,8 +302,12 @@ final class BubbleValleyView extends View {
             case MotionEvent.ACTION_DOWN:
                 downX=lastX=event.getX();downY=lastY=event.getY();
                 moved=longPressed=pinching=false;
-                down=hit(downX,downY);
-                if(down!=null)handler.postDelayed(hold,ViewConfiguration.getLongPressTimeout());
+                ControlHit controlHit=hitControl(downX,downY);
+                controlBubble=controlHit==null?null:controlHit.bubble;
+                controlIndex=controlHit==null?-1:controlHit.kind;
+                down=controlBubble==null?hit(downX,downY):controlBubble;
+                if(down!=null&&controlBubble==null)
+                    handler.postDelayed(hold,ViewConfiguration.getLongPressTimeout());
                 return true;
             case MotionEvent.ACTION_POINTER_DOWN:
                 pinching=moved=true;cancelHold();return true;
@@ -263,10 +323,17 @@ final class BubbleValleyView extends View {
                 moved=true;cancelHold();return true;
             case MotionEvent.ACTION_UP:
                 cancelHold();
-                if(!moved&&!longPressed&&down!=null){performClick();listener.open(down.id);}
-                down=null;return true;
+                if(!moved&&!longPressed&&down!=null){
+                    performClick();
+                    if(controlBubble!=null){
+                        if(controlIndex==0)listener.customize(controlBubble.id);
+                        else if(controlIndex==1)listener.add(controlBubble.id);
+                        else if(controlIndex==2)listener.options(controlBubble.id);
+                    }else listener.open(down.id);
+                }
+                down=controlBubble=null;controlIndex=-1;return true;
             case MotionEvent.ACTION_CANCEL:
-                cancelHold();down=null;return true;
+                cancelHold();down=controlBubble=null;controlIndex=-1;return true;
             default:return true;
         }
     }
